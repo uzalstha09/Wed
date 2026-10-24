@@ -150,6 +150,7 @@ function dv(s){return String(s).replace(/[0-9]/g,function(d){return '०१२�
 function esc(s){return String(s).replace(/[<&>]/g,function(c){return{'<':'&lt;','&':'&amp;','>':'&gt;'}[c]})}
 var q=new URLSearchParams(location.search),g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
 if(g){$('gst').textContent='आदरणीय '+g;$('gst').style.display='';$('gto').textContent=g+' का लागि';$('gto').style.display='';}
+(function(){var ix=C.events.length>1?{j:0,r:1}:{r:0};for(var k in ix){var e=C.events[ix[k]],t=(q.get(k+'t')||'').trim().slice(0,40),v=(q.get(k+'v')||'').trim().slice(0,60),m=(q.get(k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m))e.map=m.slice(0,500)}})();
 var nm=C.groom+' & '+C.bride;
 $('n1').textContent=C.groom;$('n2').textContent=C.bride;$('pn').textContent=nm;$('fn').textContent=(C.groom+' '+C.surname+'  &  '+C.bride+' '+C.surname).toUpperCase();
 $('s1').textContent=$('s3').textContent=C.groom[0]+'&'+C.bride[0];
