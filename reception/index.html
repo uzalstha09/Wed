@@ -92,7 +92,7 @@ body:not(.rdy) .amb{display:none}
 .cd b{display:block;font:500 24px 'Cormorant Garamond',serif;color:var(--cu)}
 .cd span{font:400 9px 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#6a5a4a}
 
-.lk{display:inline-block;margin-top:8px;padding:5px 13px;border:1px solid #b9702f99;border-radius:20px;font:400 11px 'Jost',sans-serif;letter-spacing:.08em;color:var(--cu);text-decoration:none}
+.lk{display:inline-block;margin-top:8px;padding:11px 18px;position:relative;z-index:5;-webkit-tap-highlight-color:#b9702f33;border:1px solid #b9702f99;border-radius:20px;font:400 11px 'Jost',sans-serif;letter-spacing:.08em;color:var(--cu);text-decoration:none}
 .e{display:flex;flex-direction:column;align-items:center}.e .bs{margin-bottom:8px}.e .lk{margin-top:auto}.mo{white-space:nowrap;font-size:12px;letter-spacing:.14em}
 
 .fr,.fl{position:absolute;inset:0}.fr{display:none}
@@ -155,7 +155,7 @@ $('n1').textContent=C.groom;$('n2').textContent=C.bride;$('pn').textContent=nm;$
 $('s1').textContent=$('s3').textContent=C.groom[0]+'&'+C.bride[0];
 $('msg').textContent=C.msg;document.title=nm+' · '+C.title;
 var h='';C.events.forEach(function(e){var t=new Date(e.date+'T00:00:00'),tv=[e.time,e.venue].filter(Boolean).join(' · ');
-h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+t.getDate()+'</b><div class="mo">'+MN[t.getMonth()]+' '+t.getFullYear()+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(e.map)+'" target="_blank" rel="noopener">📍 View Location</a>':'')+'</div>'});
+h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+t.getDate()+'</b><div class="mo">'+MN[t.getMonth()]+' '+t.getFullYear()+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(e.map)+'" rel="noopener">📍 View Location</a>':'')+'</div>'});
 $('evs').innerHTML=h;
 var cd=$('cd'),target=new Date(C.events[0].date+'T00:00:00');
 ['Days','Hours','Mins','Secs'].forEach(function(l){cd.innerHTML+='<div><b>00</b><span>'+l+'</span></div>'});
