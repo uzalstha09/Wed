@@ -146,6 +146,7 @@ body:not(.rdy) .amb{display:none}
 (function(){
 var C={"groom": "उज्ज्वल", "bride": "ब्लेसी", "surname": "श्रेष्ठ", "msg": "तपाईंको उपस्थिति र आशीर्वादले हाम्रो उत्सवलाई पूर्णता दिनेछ।", "title": "विवाह रिसेप्सन", "events": [{"label": "रिसेप्सन", "date": "2026-11-28", "bs": "मंसिर १२, २०८३", "time": "साँझ ५:०० बजेदेखि", "venue": "", "map": "https://maps.app.goo.gl/SPPcMuiBtRUtC3bx6?g_st=ic"}]},$=function(i){return document.getElementById(i)};
 var WD=['आइतबार','सोमबार','मंगलबार','बुधबार','बिहीबार','शुक्रबार','शनिबार'],MN=['जनवरी','फेब्रुअरी','मार्च','अप्रिल','मे','जुन','जुलाई','अगस्ट','सेप्टेम्बर','अक्टोबर','नोभेम्बर','डिसेम्बर'];
+function cm(u){try{var x=new URL(u);if(/(^|\.)goo\.gl$/.test(x.hostname))x.search='';return x.toString()}catch(e){return u}}
 function dv(s){return String(s).replace(/[0-9]/g,function(d){return '०१२३४५६७८९'[d]})}
 function esc(s){return String(s).replace(/[<&>]/g,function(c){return{'<':'&lt;','&':'&amp;','>':'&gt;'}[c]})}
 var q=new URLSearchParams(location.search),g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
@@ -156,7 +157,7 @@ $('n1').textContent=C.groom;$('n2').textContent=C.bride;$('pn').textContent=nm;$
 $('s1').textContent=$('s3').textContent=C.groom[0]+'&'+C.bride[0];
 $('msg').textContent=C.msg;document.title=nm+' · '+C.title;
 var h='';C.events.forEach(function(e){var t=new Date(e.date+'T00:00:00'),tv=[e.time,e.venue].filter(Boolean).join(' · ');
-h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+dv(t.getDate())+'</b><div class="mo">'+MN[t.getMonth()]+' '+dv(t.getFullYear())+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(e.map)+'" rel="noopener">📍 स्थान हेर्नुहोस्</a>':'')+'</div>'});
+h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+dv(t.getDate())+'</b><div class="mo">'+MN[t.getMonth()]+' '+dv(t.getFullYear())+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener">📍 स्थान हेर्नुहोस्</a>':'')+'</div>'});
 $('evs').innerHTML=h;
 var cd=$('cd'),target=new Date(C.events[0].date+'T00:00:00');
 ['दिन','घण्टा','मिनेट','सेकेन्ड'].forEach(function(l){cd.innerHTML+='<div><b>00</b><span>'+l+'</span></div>'});

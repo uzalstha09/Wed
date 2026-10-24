@@ -146,6 +146,7 @@ body:not(.rdy) .amb{display:none}
 (function(){
 var C={"groom": "Ujjwal", "bride": "Blesy", "surname": "Shrestha", "msg": "Your presence and blessings will make our celebration complete.", "title": "Wedding Reception", "events": [{"label": "Reception", "date": "2026-11-28", "bs": "Mangsir 12, 2083", "time": "5:00 PM onwards", "venue": "", "map": "https://maps.app.goo.gl/SPPcMuiBtRUtC3bx6?g_st=ic"}]},$=function(i){return document.getElementById(i)};
 var WD=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'],MN=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+function cm(u){try{var x=new URL(u);if(/(^|\.)goo\.gl$/.test(x.hostname))x.search='';return x.toString()}catch(e){return u}}
 function esc(s){return String(s).replace(/[<&>]/g,function(c){return{'<':'&lt;','&':'&amp;','>':'&gt;'}[c]})}
 var q=new URLSearchParams(location.search),g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
 if(g){$('gst').textContent='Dear '+g;$('gst').style.display='';$('gto').textContent='For '+g;$('gto').style.display='';}
@@ -155,7 +156,7 @@ $('n1').textContent=C.groom;$('n2').textContent=C.bride;$('pn').textContent=nm;$
 $('s1').textContent=$('s3').textContent=C.groom[0]+'&'+C.bride[0];
 $('msg').textContent=C.msg;document.title=nm+' · '+C.title;
 var h='';C.events.forEach(function(e){var t=new Date(e.date+'T00:00:00'),tv=[e.time,e.venue].filter(Boolean).join(' · ');
-h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+t.getDate()+'</b><div class="mo">'+MN[t.getMonth()]+' '+t.getFullYear()+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(e.map)+'" rel="noopener">📍 View Location</a>':'')+'</div>'});
+h+='<div class="e"><div class="cap">'+esc(e.label)+'</div><b class="dn">'+t.getDate()+'</b><div class="mo">'+MN[t.getMonth()]+' '+t.getFullYear()+'</div><div class="wd">'+WD[t.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener">📍 View Location</a>':'')+'</div>'});
 $('evs').innerHTML=h;
 var cd=$('cd'),target=new Date(C.events[0].date+'T00:00:00');
 ['Days','Hours','Mins','Secs'].forEach(function(l){cd.innerHTML+='<div><b>00</b><span>'+l+'</span></div>'});
