@@ -16,7 +16,7 @@ EV = {
   'j': dict(date='2026-11-25', bs={'en': 'Mangsir 9, 2083', 'ne': 'मंसिर ९, २०८३'},
             label={'en': 'Wedding', 'ne': 'विवाह'}, time={'en': '', 'ne': ''},
             venue={'en': '', 'ne': ''},
-            map='https://www.google.com/maps/place/MFC7+VQW+Rose+Party+Palace,+H10,+Butwal,+Lumbini+Province+32907/@0,0,22z/data=!4m2!3m1!1s0x3996842b4da06a89:0xe2a5776e09e72b59'),
+            map='https://maps.app.goo.gl/B4FtiDtbxvyte3Ln6'),
   'r': dict(date='2026-11-28', bs={'en': 'Mangsir 12, 2083', 'ne': 'मंसिर १२, २०८३'},
             label={'en': 'Reception', 'ne': 'रिसेप्सन'}, time={'en': '5:00 PM onwards', 'ne': 'साँझ ५:०० बजेदेखि'},
             venue={'en': '', 'ne': ''},
@@ -311,7 +311,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 function cm(u){try{var x=new URL(u);if(/(^|\.)goo\.gl$/.test(x.hostname))x.search='';return x.toString()}catch(e){return u}}
 var q=new URLSearchParams(location.search);
 var g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
-C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m))e.map=m.slice(0,600)});
+C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89/.test(m))e.map=m.slice(0,600)});
 if(g){document.body.classList.add('named');$('tagn').textContent=g;$('dearn').textContent=T.dear+' '+g;$('rn').value=g}
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
