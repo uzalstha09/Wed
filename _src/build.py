@@ -130,7 +130,7 @@ body.rd{overflow-y:auto}
 .dates{margin-top:16px;display:flex;flex-direction:column;gap:10px}
 .dates div{font:500 13px var(--bd);letter-spacing:.24em;text-transform:uppercase;color:var(--deep)}
 .dates span{display:block;font:italic 400 15px var(--bd);letter-spacing:.02em;text-transform:none;color:#8a6f7d;margin-top:2px}
-.cue{position:absolute;left:0;right:0;bottom:4.5%;z-index:2;font:500 10px var(--bd);letter-spacing:.34em;text-transform:uppercase;color:#8a6f7d}
+.cue{position:absolute;left:0;right:0;bottom:1.6%;z-index:2;font:500 10px var(--bd);letter-spacing:.34em;text-transform:uppercase;color:#8a6f7d}
 .cue:after{content:'';display:block;width:1px;height:34px;margin:8px auto 0;background:linear-gradient(#8a6f7d,transparent);animation:drip 2.2s ease-in-out infinite;transform-origin:top}
 @keyframes drip{0%{transform:scaleY(0);opacity:1}70%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
 /* photo */
