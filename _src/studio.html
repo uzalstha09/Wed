@@ -1,0 +1,203 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+html,body{margin:0;background:transparent}
+@font-face{font-family:'Great Vibes';src:url(FONTDIR/great-vibes/files/great-vibes-latin-400-normal.woff2)}
+svg{display:block}
+</style></head><body>
+<div id="out"></div>
+<script>
+/* ---------- palette (dusty rose / mauve, tone-on-tone) ---------- */
+var PAL={sat1:'#d9c8cf',sat2:'#c3adb8',sat3:'#ab93a0',lace:'#ece2e6',lace2:'#d2bfc8',shd:'#5e4452',plum:'#4b2537'};
+var q=new URLSearchParams(location.search),A=q.get('a')||'top',W=+(q.get('w')||450),H=+(q.get('h')||975);
+var rnd=(function(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646}})(+(q.get('seed')||7));
+function P(x,y){return {x:x,y:y}}
+function sub(a,b){return P(a.x-b.x,a.y-b.y)}function add(a,b){return P(a.x+b.x,a.y+b.y)}function mul(a,k){return P(a.x*k,a.y*k)}
+function len(a){return Math.hypot(a.x,a.y)}function nrm(a){var l=len(a)||1;return P(a.x/l,a.y/l)}function perp(a){return P(-a.y,a.x)}
+function f(n){return n.toFixed(1)}
+
+/* shared defs: emboss filter, pearl gradient, tulle, noise */
+var DEFS='<defs>'+
+'<filter id="emb" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">'+
+ '<feGaussianBlur in="SourceAlpha" stdDeviation="0.9" result="b"/>'+
+ '<feSpecularLighting in="b" surfaceScale="1.8" specularConstant=".45" specularExponent="22" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>'+
+ '<feComposite in="sp" in2="SourceAlpha" operator="in" result="sp2"/>'+
+ '<feDiffuseLighting in="b" surfaceScale="1.7" diffuseConstant="1.08" lighting-color="#ffffff" result="df"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>'+
+ '<feComposite in="df" in2="SourceAlpha" operator="in" result="df2"/>'+
+ '<feBlend in="SourceGraphic" in2="df2" mode="multiply" result="m"/>'+
+ '<feComposite in="m" in2="sp2" operator="arithmetic" k1="0" k2="1" k3=".3" k4="0" result="lit"/>'+
+ '<feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="sb"/><feOffset in="sb" dx="1.2" dy="1.8" result="so"/>'+
+ '<feFlood flood-color="'+PAL.shd+'" flood-opacity=".26"/><feComposite in2="so" operator="in" result="sh"/>'+
+ '<feMerge><feMergeNode in="sh"/><feMergeNode in="lit"/></feMerge></filter>'+
+'<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>'+
+'<filter id="dropbig" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="5" result="o"/><feFlood flood-color="#3a2230" flood-opacity=".45"/><feComposite in2="o" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
+'<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="t"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .07"/></feComponentTransfer><feComposite in2="SourceGraphic" operator="in"/></filter>'+
+'<filter id="weave" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.6" numOctaves="2" seed="9"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .10"/></feComponentTransfer></filter>'+
+'<radialGradient id="pearl" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#f1e8ec"/><stop offset=".8" stop-color="#bba5b1"/><stop offset="1" stop-color="#8f7783"/></radialGradient>'+
+'<pattern id="net" width="7" height="6" patternUnits="userSpaceOnUse"><path d="M0 3L3.5 0L7 3L3.5 6Z" fill="none" stroke="#ffffff" stroke-width=".35" opacity=".55"/></pattern>'+
+'<pattern id="lnet" width="6" height="5.2" patternUnits="userSpaceOnUse"><path d="M0 2.6L1.5 0H4.5L6 2.6L4.5 5.2H1.5Z" fill="none" stroke="#f3ebee" stroke-width=".7"/></pattern>'+
+'</defs>';
+
+function pearl(x,y,r){return '<circle cx="'+f(x+r*.25)+'" cy="'+f(y+r*.45)+'" r="'+f(r*1.05)+'" fill="#4a3040" opacity=".28" filter="url(#soft)" style="filter:blur('+f(r*.35)+'px)"/><circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r)+'" fill="url(#pearl)"/><circle cx="'+f(x-r*.35)+'" cy="'+f(y-r*.38)+'" r="'+f(r*.28)+'" fill="#fff" opacity=".85"/>'}
+
+/* five-petal flower */
+function flower(x,y,r,rot){var s='';for(var i=0;i<5;i++){var a=rot+i*Math.PI*2/5,cx=x+Math.cos(a)*r*.62,cy=y+Math.sin(a)*r*.62;s+='<ellipse cx="'+f(cx)+'" cy="'+f(cy)+'" rx="'+f(r*.55)+'" ry="'+f(r*.38)+'" transform="rotate('+f(a*180/Math.PI)+' '+f(cx)+' '+f(cy)+')"/>'}return s+'<circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r*.28)+'"/>'}
+function leaf(x,y,l,a){var c=Math.cos(a),s=Math.sin(a),w=l*.36;var p1=P(x+c*l,y+s*l),m1=P(x+c*l*.5-s*w,y+s*l*.5+c*w),m2=P(x+c*l*.5+s*w,y+s*l*.5-c*w);return '<path d="M'+f(x)+' '+f(y)+'Q'+f(m1.x)+' '+f(m1.y)+' '+f(p1.x)+' '+f(p1.y)+'Q'+f(m2.x)+' '+f(m2.y)+' '+f(x)+' '+f(y)+'Z"/>'}
+
+/* sprig: a curving stem with leaves and small flowers, from point p, direction ang, length L */
+function sprig(p,ang,L,side){var s='',pts=[],n=10;for(var i=0;i<=n;i++){var t=i/n,a=ang+side*Math.sin(t*2.2)*.5;pts.push(P(p.x+Math.cos(ang)*L*t+Math.cos(ang+Math.PI/2)*side*Math.sin(t*3)*L*.08,p.y+Math.sin(ang)*L*t+Math.sin(ang+Math.PI/2)*side*Math.sin(t*3)*L*.08))}
+ s+='<path d="M'+pts.map(function(q){return f(q.x)+' '+f(q.y)}).join('L')+'" fill="none" stroke="'+PAL.lace+'" stroke-width="1.6" stroke-linecap="round"/>';
+ for(var j=2;j<n;j+=2){var q=pts[j],d=nrm(sub(pts[j+1]||pts[j],pts[j-1])),a=Math.atan2(d.y,d.x);s+=leaf(q.x,q.y,L*.13,a+ (j%4?1:-1)*.9)}
+ s+=flower(pts[n].x,pts[n].y,L*.085,rnd()*6);if(L>40)s+=flower(pts[5].x+Math.cos(ang+side*1.4)*L*.12,pts[5].y+Math.sin(ang+side*1.4)*L*.12,L*.06,rnd()*6);
+ return s}
+
+/* lace band along segment S->E; out = unit normal pointing to the scallop side */
+function band(S,E,out,opt){opt=opt||{};var d=sub(E,S),L=len(d),u=nrm(d),r=opt.r||11,per=r*2,n=Math.max(1,Math.round(L/per)),step=L/n,wid=opt.w||26;
+ var holes='',outline='M'+f(S.x-out.x*wid)+' '+f(S.y-out.y*wid);
+ // inner edge line
+ var inS=add(S,mul(out,-wid)),inE=add(E,mul(out,-wid));
+ var path='M'+f(inS.x)+' '+f(inS.y)+'L'+f(S.x)+' '+f(S.y);
+ for(var i=0;i<n;i++){var a=add(S,mul(u,step*i)),b=add(S,mul(u,step*(i+1))),c=add(add(a,mul(u,step/2)),mul(out,r*.95));
+   path+='Q'+f(a.x+out.x*r*1.25+u.x*step*.02)+' '+f(a.y+out.y*r*1.25+u.y*step*.02)+' '+f(c.x)+' '+f(c.y)+'Q'+f(b.x+out.x*r*1.25)+' '+f(b.y+out.y*r*1.25)+' '+f(b.x)+' '+f(b.y);
+   var hc=add(add(a,mul(u,step/2)),mul(out,r*.25));holes+='M'+f(hc.x+3.1)+' '+f(hc.y)+'a3.1 3.1 0 1 0 -6.2 0a3.1 3.1 0 1 0 6.2 0Z';
+   var hb=add(add(a,mul(u,step/2)),mul(out,-wid*.55));holes+='M'+f(hb.x+1.7)+' '+f(hb.y)+'a1.7 1.7 0 1 0 -3.4 0a1.7 1.7 0 1 0 3.4 0Z';
+ }
+ path+='L'+f(inE.x)+' '+f(inE.y)+'Z';
+ var g='<path d="'+path+holes+'" fill-rule="evenodd" fill="'+PAL.lace+'"/>';
+ // picots & inner cord
+ var deco='';for(var i=0;i<n;i++){var a=add(S,mul(u,step*i)),c=add(add(a,mul(u,step/2)),mul(out,r*1.02));deco+='<circle cx="'+f(c.x)+'" cy="'+f(c.y)+'" r="1.6"/>';var m=add(add(a,mul(u,step/2)),mul(out,-wid*.18));deco+=flower(m.x,m.y,4.2,i)}
+ deco+='<path d="M'+f(inS.x+out.x*3)+' '+f(inS.y+out.y*3)+'L'+f(inE.x+out.x*3)+' '+f(inE.y+out.y*3)+'" fill="none" stroke="'+PAL.lace+'" stroke-width="2.2"/>';
+ // sprigs growing inward
+ var spr='';if(opt.sprigs!==false){var k=Math.max(1,Math.floor(L/70));for(var i=0;i<k;i++){var t=(i+.5)/k,base=add(add(S,mul(d,t)),mul(out,-wid));var ang=Math.atan2(-out.y,-out.x)+(rnd()-.5)*.9;spr+=sprig(base,ang,26+rnd()*24,i%2?1:-1)}}
+ return '<g filter="url(#emb)">'+g+'<g fill="'+PAL.lace+'">'+deco+'</g><g fill="'+PAL.lace+'">'+spr+'</g></g>'}
+
+
+function qpt(S,Cc,E,t){var a=1-t;return P(a*a*S.x+2*a*t*Cc.x+t*t*E.x,a*a*S.y+2*a*t*Cc.y+t*t*E.y)}
+function curve(S,E,bow,outRef,n){var m=P((S.x+E.x)/2,(S.y+E.y)/2),nn=nrm(perp(sub(E,S)));if((nn.x*(outRef.x-m.x)+nn.y*(outRef.y-m.y))<0)nn=mul(nn,-1);var Cc=add(m,mul(nn,-bow));var pts=[];for(var i=0;i<=n;i++)pts.push(qpt(S,Cc,E,i/n));
+ var out=[];for(var i=0;i<=n;i++){var a=pts[Math.max(0,i-1)],b=pts[Math.min(n,i+1)],t=nrm(sub(b,a)),o=perp(t);if((o.x*(outRef.x-pts[i].x)+o.y*(outRef.y-pts[i].y))<0)o=mul(o,-1);out.push(o)}return {p:pts,o:out}}
+function lace(cv,opt){opt=opt||{};var p=cv.p,o=cv.o,n=p.length-1,r=opt.r||16,wid=opt.w||40;
+ var Ltot=0;for(var i=1;i<=n;i++)Ltot+=len(sub(p[i],p[i-1]));
+ // resample at scallop spacing
+ var per=r*1.9,ns=Math.max(2,Math.round(Ltot/per)),pts=[],os=[];var acc=[0];for(var i=1;i<=n;i++)acc.push(acc[i-1]+len(sub(p[i],p[i-1])));
+ function at(d){for(var i=1;i<=n;i++)if(acc[i]>=d){var t=(d-acc[i-1])/(acc[i]-acc[i-1]||1);return [add(p[i-1],mul(sub(p[i],p[i-1]),t)),nrm(add(mul(o[i-1],1-t),mul(o[i],t)))]}return [p[n],o[n]]}
+ for(var k=0;k<=ns*4;k++){var r2=at(Ltot*k/(ns*4));pts.push(r2[0]);os.push(r2[1])}
+ // scallop outer edge path
+ var outer='M'+f(pts[0].x)+' '+f(pts[0].y);
+ for(var k=0;k<ns;k++){var A0=pts[k*4],B0=pts[k*4+4],om=os[k*4+2],ch=sub(B0,A0),rr=len(ch)/2;var cr=ch.x*om.y-ch.y*om.x;outer+='A'+f(rr*1.02)+' '+f(rr*1.02)+' 0 0 '+(cr>0?0:1)+' '+f(B0.x)+' '+f(B0.y)}
+ r=Math.max(6,len(sub(pts[4],pts[0]))/2);
+ var inner='';for(var k=pts.length-1;k>=0;k--){var q=add(pts[k],mul(os[k],-wid));inner+=(k==pts.length-1?'L':'L')+f(q.x)+' '+f(q.y)}
+ var shape=outer+inner+'Z';
+ var g='<path d="'+shape+'" fill="url(#lnet)" opacity=".9"/>';
+ // cords: scallop outline + inner straight cords
+ var cords='<path d="'+outer+'" fill="none" stroke="'+PAL.lace+'" stroke-width="3.2" stroke-linejoin="round"/>';
+ function offLine(d){var s='M';for(var k=0;k<pts.length;k++){var q=add(pts[k],mul(os[k],-d));s+=(k?'L':'')+f(q.x)+' '+f(q.y)}return s}
+ cords+='<path d="'+offLine(2)+'" fill="none" stroke="'+PAL.lace+'" stroke-width="2.4"/><path d="'+offLine(wid)+'" fill="none" stroke="'+PAL.lace+'" stroke-width="2.6"/>';
+ // motifs
+ var mo='';
+ for(var k=0;k<ns;k++){var m=pts[k*4+2],om=os[k*4+2],t=nrm(sub(pts[k*4+4],pts[k*4]));
+   var c=add(m,mul(om,r*.42));mo+=flower(c.x,c.y,r*.34,k);  // flower in each scallop
+   for(var j=-1;j<=1;j+=2){var pc=add(add(m,mul(om,r*1.02)),mul(t,j*r*.55));mo+='<circle cx="'+f(pc.x)+'" cy="'+f(pc.y)+'" r="1.5"/>'}  // picots
+   var pk=add(m,mul(om,r*1.12));mo+='<circle cx="'+f(pk.x)+'" cy="'+f(pk.y)+'" r="1.8"/>';
+ }
+ // wavy vine inside band with leaves and flowers
+ var vine='M';for(var k=0;k<pts.length;k++){var w=Math.sin(k/4*Math.PI)*wid*.18,q=add(pts[k],mul(os[k],-wid*.55+w));vine+=(k?'L':'')+f(q.x)+' '+f(q.y)}
+ var vin='<path d="'+vine+'" fill="none" stroke="'+PAL.lace+'" stroke-width="1.8"/>';
+ for(var k=1;k<pts.length-1;k+=2){var t=nrm(sub(pts[k+1],pts[k-1])),q=add(pts[k],mul(os[k],-wid*.55+Math.sin(k/4*Math.PI)*wid*.18));var a=Math.atan2(t.y,t.x);
+   if(k%4==1)mo+=leaf(q.x,q.y,wid*.36,a-1.0)+leaf(q.x,q.y,wid*.3,a+Math.PI+1.0);else mo+=flower(q.x,q.y,wid*.15,k)}
+ // sprays inward
+ var spr='';if(opt.sprigs!==false){var cnt=Math.max(1,Math.floor(Ltot/(opt.sprayGap||110)));for(var i=0;i<cnt;i++){var idx=Math.round((i+.5)/cnt*(pts.length-1)),q=add(pts[idx],mul(os[idx],-wid-2));var ang=Math.atan2(-os[idx].y,-os[idx].x);spr+=spray(q,ang+(i%2?.35:-.35),opt.sprayLen||46,i%2?1:-1)}}
+ return '<g filter="url(#emb)">'+g+cords+vin+'<g fill="'+PAL.lace+'">'+mo+spr+'</g></g>'}
+/* fuller spray: stem with paired rounded leaves and 2-3 flowers */
+function spray(p,ang,L,side){var s='',n=12,pts=[];for(var i=0;i<=n;i++){var t=i/n,bend=side*Math.sin(t*Math.PI*.9)*L*.16;pts.push(P(p.x+Math.cos(ang)*L*t+Math.cos(ang+Math.PI/2)*bend,p.y+Math.sin(ang)*L*t+Math.sin(ang+Math.PI/2)*bend))}
+ s+='<path d="M'+pts.map(function(q){return f(q.x)+' '+f(q.y)}).join('L')+'" fill="none" stroke="'+PAL.lace+'" stroke-width="2.2" stroke-linecap="round"/>';
+ for(var j=2;j<n;j+=2){var q=pts[j],d=nrm(sub(pts[j+1],pts[j-1])),a=Math.atan2(d.y,d.x),ll=L*(.26-j*.008);s+=leaf(q.x,q.y,ll,a+.75)+leaf(q.x,q.y,ll*.9,a-.75)}
+ s+=flower(pts[n].x,pts[n].y,L*.12,ang);var q=pts[7],d=nrm(sub(pts[8],pts[6]));s+=flower(q.x+Math.cos(Math.atan2(d.y,d.x)+side*1.3)*L*.2,q.y+Math.sin(Math.atan2(d.y,d.x)+side*1.3)*L*.2,L*.085,1);
+ s+='<circle cx="'+f(pts[4].x+Math.cos(ang-side*1.4)*L*.16)+'" cy="'+f(pts[4].y+Math.sin(ang-side*1.4)*L*.16)+'" r="'+f(L*.045)+'"/>';
+ return s}
+
+/* satin fill for a polygon */
+function satin(poly,id,ang){var pts=poly.map(function(p){return f(p.x)+','+f(p.y)}).join(' ');
+ return '<clipPath id="c'+id+'"><polygon points="'+pts+'"/></clipPath><g clip-path="url(#c'+id+')">'+
+ '<rect x="-50" y="-50" width="'+(W+100)+'" height="'+(H+100)+'" fill="'+PAL.sat2+'"/>'+
+ '<g filter="url(#soft)" style="filter:blur(28px)">'+
+  '<ellipse cx="'+f(W*.3)+'" cy="'+f(H*.25)+'" rx="'+f(W*.5)+'" ry="'+f(H*.12)+'" fill="'+PAL.sat1+'" transform="rotate('+(ang||-30)+' '+f(W*.3)+' '+f(H*.25)+')" opacity=".9"/>'+
+  '<ellipse cx="'+f(W*.75)+'" cy="'+f(H*.7)+'" rx="'+f(W*.45)+'" ry="'+f(H*.1)+'" fill="'+PAL.sat1+'" transform="rotate('+(ang||-30)+' '+f(W*.75)+' '+f(H*.7)+')" opacity=".75"/>'+
+  '<ellipse cx="'+f(W*.55)+'" cy="'+f(H*.45)+'" rx="'+f(W*.4)+'" ry="'+f(H*.06)+'" fill="'+PAL.sat3+'" transform="rotate('+(ang||-30)+' '+f(W*.55)+' '+f(H*.45)+')" opacity=".5"/>'+
+ '</g><rect width="'+W+'" height="'+H+'" filter="url(#weave)"/><rect width="'+W+'" height="'+H+'" fill="#000" filter="url(#grain)"/></g>'}
+
+/* tulle: radiating soft strands from edge points to apex */
+function tulle(poly,apex,id){var s='<g clip-path="url(#c'+id+')" opacity=".55">';
+ for(var i=0;i<12;i++){var a=poly[0],b=poly[poly.length-1];var t=rnd(),p=add(a,mul(sub(b,a),t));var w=4+rnd()*14;
+  s+='<path d="M'+f(p.x)+' '+f(p.y)+'Q'+f((p.x+apex.x)/2+(rnd()-.5)*40)+' '+f((p.y+apex.y)/2+(rnd()-.5)*40)+' '+f(apex.x)+' '+f(apex.y)+'" fill="none" stroke="#fff" stroke-opacity="'+(.06+rnd()*.12).toFixed(2)+'" stroke-width="'+f(w)+'" stroke-linecap="round" style="filter:blur(4px)"/>'}
+ s+='<rect width="'+W+'" height="'+H+'" fill="url(#net)" opacity=".22"/></g>';return s}
+
+function scatterPearls(poly,apex,n,avoid){var s='';var minx=Math.min.apply(0,poly.map(function(p){return p.x})),maxx=Math.max.apply(0,poly.map(function(p){return p.x})),miny=Math.min.apply(0,poly.map(function(p){return p.y})),maxy=Math.max.apply(0,poly.map(function(p){return p.y}));
+ var got=0,tries=0;while(got<n&&tries<2000){tries++;var p=P(minx+rnd()*(maxx-minx),miny+rnd()*(maxy-miny));if(!inside(p,poly))continue;if(edgeDist(p,poly)<34)continue;if(Math.hypot(p.x-apex.x,p.y-apex.y)<70)continue;s+=pearl(p.x,p.y,3.2+rnd()*1.6);got++}return s}
+function inside(p,poly){var c=false;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var a=poly[i],b=poly[j];if(((a.y>p.y)!=(b.y>p.y))&&(p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x))c=!c}return c}
+function edgeDist(p,poly){var m=1e9;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var a=poly[j],b=poly[i],ab=sub(b,a),t=Math.max(0,Math.min(1,((p.x-a.x)*ab.x+(p.y-a.y)*ab.y)/(ab.x*ab.x+ab.y*ab.y))),q=add(a,mul(ab,t));m=Math.min(m,Math.hypot(p.x-q.x,p.y-q.y))}return m}
+
+/* flap: corners A,B on the screen edge, apex X. free edges are gently concave curves */
+function flap(A,B,X,id,tint,bow){var cen=P((A.x+B.x+X.x)/3,(A.y+B.y+X.y)/3);bow=bow||26;
+ var c1=curve(A,X,bow,P(2*X.x-cen.x,2*X.y-cen.y),40),c2=curve(X,B,bow,P(2*X.x-cen.x,2*X.y-cen.y),40);
+ // outward normals must point away from the flap body
+ function fix(cv){for(var i=0;i<cv.o.length;i++){var q=cv.p[i];if(cv.o[i].x*(q.x-cen.x)+cv.o[i].y*(q.y-cen.y)<0)cv.o[i]=mul(cv.o[i],-1)}return cv}
+ c1=fix(c1);c2=fix(c2);
+ var poly=c1.p.concat(c2.p.slice(1));
+ var s='<g filter="url(#dropbig)"><g style="filter:brightness('+(tint||1)+')">'+satin(poly,id)+tulle([A,B],X,id)+'</g></g>';
+ s+=scatterPearls(poly,X,8);
+ s+=lace(c1)+lace(c2);
+ return s}
+
+function seal(cx,cy,rx,ry){var pts=[],N=140;for(var i=0;i<N;i++){var t=i/N*Math.PI*2,k=1+.035*Math.sin(t*7+1)+.02*Math.sin(t*13)+.015*Math.sin(t*3+2);pts.push(f(cx+rx*1.12*k*Math.cos(t))+' '+f(cy+ry*1.12*k*Math.sin(t)))}
+ var wreath='';for(var i=0;i<22;i++){var a=i/22*Math.PI*2;var x=cx+Math.cos(a)*rx*.78,y=cy+Math.sin(a)*ry*.8;wreath+=leaf(x,y,9,a+Math.PI/2+(i%2?.5:-.5));if(i%4==0)wreath+=flower(x,y,4,a)}
+ return '<g filter="url(#dropbig)"><path d="M'+pts.join('L')+'Z" fill="'+PAL.sat2+'"/></g>'+
+  '<g filter="url(#emb)"><path d="M'+pts.join('L')+'Z" fill="'+PAL.lace2+'"/></g>'+
+  '<g filter="url(#emb)"><ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+PAL.sat1+'"/></g>'+
+  '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rx-5)+'" ry="'+(ry-5)+'" fill="none" stroke="'+PAL.sat3+'" stroke-width="1" opacity=".6"/>'+
+  '<g filter="url(#emb)" fill="'+PAL.lace+'">'+wreath+'<text x="'+cx+'" y="'+(cy+ry*.2)+'" text-anchor="middle" font-family="Great Vibes" font-size="'+f(ry*.72)+'" fill="'+PAL.lace+'">U&amp;B</text></g>'}
+
+/* ---------- assets ---------- */
+var C=P(W/2,H*.5),body='';
+if(A==='top'){var X=P(W/2,H*.545);body=flap(P(-8,-8),P(W+8,-8),X,'t',1.02,55);}
+if(A==='left'){var poly=[P(-8,-8),P(W*.5+2,-8),P(W*.5+2,H+8),P(-8,H+8)];body='<g style="filter:brightness(.95)">'+satin(poly,'l',-20)+'</g>'+scatterPearls([P(0,H*.2),P(W*.42,H*.5),P(0,H*.8)],P(W*.5,H*.5),4);}
+if(A==='right'){var poly=[P(W*.5-2,-8),P(W+8,-8),P(W+8,H+8),P(W*.5-2,H+8)];body='<g style="filter:brightness(.95)">'+satin(poly,'r',-20)+'</g>'+scatterPearls([P(W,H*.2),P(W,H*.8),P(W*.58,H*.5)],P(W*.5,H*.5),4);}
+if(A==='bottom'){var X=P(W/2,H*.455);body=flap(P(W+8,H+8),P(-8,H+8),X,'b',.98,55);}
+if(A==='seal'){body=seal(W/2,H/2,W*.36,H*.4);}
+if(A==='inner'){ // satin base visible under flaps (the card)
+ body=satin([P(0,0),P(W,0),P(W,H),P(0,H)],'in',-35);}
+if(A==='card'){ // satin card: lace field with an oval-rectangle window in the centre
+ body='<rect width="'+W+'" height="'+H+'" fill="'+PAL.sat1+'"/><g style="filter:blur(40px)"><ellipse cx="'+W*.5+'" cy="'+H*.48+'" rx="'+W*.42+'" ry="'+H*.36+'" fill="#f1e9ec"/></g><rect width="'+W+'" height="'+H+'" filter="url(#weave)"/><rect width="'+W+'" height="'+H+'" fill="#000" filter="url(#grain)"/><!--RING-->';
+ var cx=W/2,cy=H*.5,ax=W*.36,by=H*.37,n=5,fp=[],fo=[],N=220;
+ function se(t){var c=Math.cos(t),sn=Math.sin(t);return P(cx+ax*Math.sign(c)*Math.pow(Math.abs(c),2/n),cy+by*Math.sign(sn)*Math.pow(Math.abs(sn),2/n))}
+ for(var i=0;i<=N;i++){var t=i/N*Math.PI*2;fp.push(se(t))}
+ for(var i=0;i<=N;i++){var a2=fp[(i-1+N)%N],b2=fp[(i+1)%N],tg=nrm(sub(b2,a2)),o=perp(tg);if(o.x*(cx-fp[i].x)+o.y*(cy-fp[i].y)<0)o=mul(o,-1);fo.push(o)}
+ // dense floral ring just outside the window
+ var spr='';for(var i=0;i<N;i+=3){var o=fo[i],q=add(fp[i],mul(o,-38));var ang=Math.atan2(-o.y,-o.x);spr+=spray(q,ang+(i%10?.5:-.5),(i%9?24:34),i%6?1:-1);if(i%9==0)spr+=flower(q.x-o.x*6,q.y-o.y*6,7,i)}
+ body+='<g filter="url(#emb)" fill="'+PAL.lace+'">'+spr+'</g>';
+ // fine mesh ring under the flowers
+ var ring='M'+fp.map(function(q,i){var z=add(q,mul(fo[i],-78));return f(z.x)+' '+f(z.y)}).join('L')+'Z '+'M'+fp.map(function(q){return f(q.x)+' '+f(q.y)}).join('L')+'Z';
+ body=body.replace('<!--RING-->','<g opacity=".55" filter="url(#emb)"><path d="'+ring+'" fill-rule="evenodd" fill="url(#lnet)"/></g>');
+ // scalloped lace band along the window edge, scallops pointing into the window
+ var inv=fo.map(function(o){return o});body+=lace({p:fp,o:inv},{r:12,w:30,sprigs:false});
+ // pearls along the band
+ for(var i=0;i<N;i+=11){var q=add(fp[i],mul(fo[i],-36));body+=pearl(q.x,q.y,3)}
+}
+if(A==='trim'){ // horizontal lace trim, scallops at the bottom; tileable width
+ body='<g filter="url(#emb)"><rect x="-20" y="0" width="'+(W+40)+'" height="34" fill="'+PAL.lace+'"/></g>'+(function(){var pts=[],os=[];for(var i=0;i<=40;i++){pts.push(P(-30+(W+60)*i/40,30));os.push(P(0,1))}return lace({p:pts,o:os},{r:13,w:30,sprigs:false})})();
+ var mo='';for(var x=0;x<W+20;x+=30){mo+=flower(x+15,14,6,x)+leaf(x+2,16,9,-.4)+leaf(x+28,16,9,Math.PI+.4)}
+ body+='<g filter="url(#emb)" fill="'+PAL.lace2+'">'+mo+'</g>';for(var x=15;x<W;x+=60)body+=pearl(x,38,3.2);
+}
+if(A==='plum'){ // plum velvet section background
+ body='<rect width="'+W+'" height="'+H+'" fill="'+PAL.plum+'"/><g style="filter:blur(60px)"><ellipse cx="'+W*.3+'" cy="'+H*.3+'" rx="'+W*.6+'" ry="'+H*.25+'" fill="#6a3850" opacity=".7"/><ellipse cx="'+W*.8+'" cy="'+H*.8+'" rx="'+W*.5+'" ry="'+H*.2+'" fill="#331523" opacity=".8"/></g><rect width="'+W+'" height="'+H+'" fill="#fff" filter="url(#grain)"/>';
+ }
+if(A==='paper'){ // pale mauve paper section background
+ body='<rect width="'+W+'" height="'+H+'" fill="#e6d9de"/><g style="filter:blur(60px)"><ellipse cx="'+W*.5+'" cy="'+H*.5+'" rx="'+W*.55+'" ry="'+H*.4+'" fill="#f1e9ec"/></g><rect width="'+W+'" height="'+H+'" filter="url(#weave)"/><rect width="'+W+'" height="'+H+'" fill="#000" filter="url(#grain)"/>';
+}
+if(A==='frame'){ // oval lace ring for the couple photo; centre transparent
+ var cx=W/2,cy=H/2,rx=W*.4,ry=H*.42,s='',N=56;
+ for(var i=0;i<N;i++){var a=i/N*Math.PI*2,b=(i+1)/N*Math.PI*2,S=P(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry),E=P(cx+Math.cos(b)*rx,cy+Math.sin(b)*ry),o=nrm(P(Math.cos((a+b)/2)/rx,Math.sin((a+b)/2)/ry));}var fp=[],fo=[];for(var i=0;i<=120;i++){var a=i/120*Math.PI*2;fp.push(P(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry));fo.push(nrm(P(Math.cos(a)/rx,Math.sin(a)/ry)))}s=lace({p:fp,o:fo},{r:9,w:22,sprigs:false});
+ var mo='';for(var i=0;i<14;i++){var a=i/14*Math.PI*2;mo+=spray(P(cx+Math.cos(a)*(rx-22),cy+Math.sin(a)*(ry-22)),a+Math.PI*.5,26,1)}
+ body=s+'<g filter="url(#emb)" fill="'+PAL.lace+'">'+mo+'</g>';for(var i=0;i<20;i++){var a=i/20*Math.PI*2;body+=pearl(cx+Math.cos(a)*(rx+12),cy+Math.sin(a)*(ry+12),3)}
+}
+document.getElementById('out').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+DEFS+body+'</svg>';
+document.title='ready';
+</script></body></html>
