@@ -173,7 +173,7 @@ body.rd #mute.on{display:flex}
   </div>
  </section>
 </div>
-<script>var C={"lang": "en", "ev": [{"k": "j", "label": "Wedding", "date": "2026-11-25", "bs": "Mangsir 9, 2083", "time": "", "venue": "", "map": "https://maps.app.goo.gl/B4FtiDtbxvyte3Ln6"}, {"k": "r", "label": "Reception", "date": "2026-11-28", "bs": "Mangsir 12, 2083", "time": "5:00 PM onwards", "venue": "", "map": "https://www.google.com/maps/place/MFG6%2BV5X+Diyalo+Foodland+Kalikanagar,+Butwal,+Lumbini+Province+32907/@27.6771345,83.4606209,16z/data=!4m6!3m5!1s0x399687000e38b619:0xd6fbbf73869bbccb!8m2!3d27.6771345!4d83.4606209!16s%2Fg%2F11vqbf059t"}], "T": {"months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "wd": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "units": ["Days", "Hours", "Mins", "Secs"], "viewloc": "View Location", "sending": "Opening WhatsApp…", "ok": "Thank you! Please tap Send in WhatsApp to finish.", "err": "Sorry, it could not be sent. Please try again or message us on WhatsApp.", "wamsg": "Hello Ujjwal & Blesy, this is {n}.", "need": "Please choose for each event.", "dear": "Dear", "yesw": "Yes", "now": "No", "gw": "Guests", "rsvpw": "RSVP"}, "wa": "9779813013735"};</script>
+<script>var C={"lang": "en", "ev": [{"k": "j", "label": "Wedding", "date": "2026-11-25", "bs": "Mangsir 9, 2083", "time": "", "venue": "", "map": "https://maps.app.goo.gl/B4FtiDtbxvyte3Ln6"}, {"k": "r", "label": "Reception", "date": "2026-11-28", "bs": "Mangsir 12, 2083", "time": "5:00 PM onwards", "venue": "", "map": "https://www.google.com/maps/place/MFG6%2BV5X+Diyalo+Foodland+Kalikanagar,+Butwal,+Lumbini+Province+32907/@27.6771345,83.4606209,16z/data=!4m6!3m5!1s0x399687000e38b619:0xd6fbbf73869bbccb!8m2!3d27.6771345!4d83.4606209!16s%2Fg%2F11vqbf059t"}], "T": {"months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "wd": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "units": ["Days", "Hours", "Mins", "Secs"], "viewloc": "View Location", "sending": "Opening WhatsApp…", "ok": "Thank you! Please tap Send in WhatsApp to finish.", "err": "Sorry, it could not be sent. Please try again or message us on WhatsApp.", "wamsg": "Hello Ujjwal & Blesy, this is {n}.", "need": "Please choose for each event.", "dear": "Dear", "yesw": "Yes", "now": "No", "gw": "Guests", "rsvpw": "RSVP", "sending2": "Sending…", "ok2": "Thank you! Your RSVP has been received.", "send2": "Send RSVP"}, "wa": "9779813013735"};</script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)},T=C.T,NE=C.lang==='ne';
@@ -186,7 +186,7 @@ if(g){document.body.classList.add('named');$('tagn').textContent=g;$('dearn').te
 var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={j:'wedding',r:'reception'};
 var BASE=JSON.parse(JSON.stringify(C.ev));
 function urlOv(){C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89/.test(m))e.map=m.slice(0,600)});}
-function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg)C.ev.forEach(function(e){var c=cfg[KEY[e.k]];if(!c)return;var L=NE?'ne':'en';if(typeof c.map==='string'&&/^https?:\/\//i.test(c.map))e.map=c.map;if(typeof c['time_'+L]==='string')e.time=c['time_'+L];if(typeof c['venue_'+L]==='string')e.venue=c['venue_'+L]});urlOv()}
+var RS='';function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg&&typeof cfg.rsvp_url==='string'&&/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.rsvp_url))RS=cfg.rsvp_url;if(cfg)C.ev.forEach(function(e){var c=cfg[KEY[e.k]];if(!c)return;var L=NE?'ne':'en';if(typeof c.map==='string'&&/^https?:\/\//i.test(c.map))e.map=c.map;if(typeof c['time_'+L]==='string')e.time=c['time_'+L];if(typeof c['venue_'+L]==='string')e.venue=c['venue_'+L]});urlOv()}
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
 function render(){
@@ -195,8 +195,8 @@ $('evs').innerHTML=C.ev.map(function(e,i){var d=D(e),tv=[e.time,e.venue].filter(
 $('locs').innerHTML=C.ev.map(function(e,i){var d=D(e);return '<div class="lc rv" style="--d:'+(.3+i*.2)+'s"><div class="cap">'+esc(e.label)+'</div>'+(e.venue?'<div class="vn">'+esc(e.venue)+'</div>':'')+'<div class="dt">'+T.wd[d.getDay()]+', '+fd(d)+(e.time?' · '+esc(e.time):'')+'</div>'+(e.map?'<a class="btn" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="12" height="15" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
 }
 applyCfg(null);render();
-try{var cc=localStorage.getItem('wcfg');if(cc){applyCfg(JSON.parse(cc));render()}}catch(e){}
-try{fetch(CFGURL+'?t='+Math.floor(Date.now()/60000),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(cfg){if(!cfg)return;try{localStorage.setItem('wcfg',JSON.stringify(cfg))}catch(e){}applyCfg(cfg);render();var s=document.querySelectorAll('.sec.in');}).catch(function(){})}catch(e){}
+try{var cc=localStorage.getItem('wcfg');if(cc){applyCfg(JSON.parse(cc));render();if(RS){var sb0=document.querySelector('#rf .send');if(sb0)sb0.textContent=T.send2}}}catch(e){}
+try{fetch(CFGURL+'?t='+Math.floor(Date.now()/60000),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(cfg){if(!cfg)return;try{localStorage.setItem('wcfg',JSON.stringify(cfg))}catch(e){}applyCfg(cfg);render();if(RS){var sb=document.querySelector('#rf .send');if(sb)sb.textContent=T.send2}}).catch(function(){})}catch(e){}
 var tgt=D(C.ev[0]);$('cdl').textContent=C.ev[0].label;$('cdt').textContent=T.wd[tgt.getDay()]+', '+fd(tgt);
 $('cd').innerHTML=T.units.map(function(u){return '<div><b>00</b><span>'+esc(u)+'</span></div>'}).join('');
 var cb=$('cd').querySelectorAll('b');
@@ -208,6 +208,9 @@ $('rf').addEventListener('submit',function(ev){ev.preventDefault();var f=this,b=
  for(var i=0;i<C.ev.length;i++){if(!f.querySelector('input[name="attend-'+C.ev[i].k+'"]:checked')){m.textContent=T.need;return}}
  var n=($('rn').value||'').trim();if(!n){$('rn').focus();return}
  var lines=[T.rsvpw+' — '+n];C.ev.forEach(function(e){var v=f.querySelector('input[name="attend-'+e.k+'"]:checked').value;lines.push(e.label+': '+(v==='yes'?T.yesw:T.now))});lines.push(T.gw+': '+dv($('rg').value));
+ if(RS){var body=new URLSearchParams();body.append('name',n);C.ev.forEach(function(e){body.append('attend-'+e.k,f.querySelector('input[name="attend-'+e.k+'"]:checked').value)});body.append('guests',$('rg').value);body.append('page',location.pathname);body.append('lang',C.lang);if(g)body.append('link-name',g);
+  b.disabled=true;var old=b.textContent;b.textContent=T.sending2;m.textContent='';
+  fetch(RS,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()}).then(function(){m.textContent=T.ok2;f.querySelectorAll('input,select,button').forEach(function(x){x.disabled=true});b.textContent='✓'}).catch(function(){m.textContent=T.err;b.disabled=false;b.textContent=old});return}
  m.textContent=T.ok;location.href='https://wa.me/'+C.wa+'?text='+encodeURIComponent(lines.join('\n'))});
 /* reveal */
 var secs=document.querySelectorAll('.sec');
