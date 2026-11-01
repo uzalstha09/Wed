@@ -19,7 +19,7 @@ var m=document.createElement('a');m.className='b';m.textContent='Viber';m.href='
 d.append(c,w,m);return d}
 function mk(u){return $('l').value?'उज्ज्वल र ब्लेसीको विवाहमा तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u:'You are warmly invited to the wedding of Ujjwal & Blesy. Open your invitation: '+u}
 function url(name){var q=new URLSearchParams(),w=$('w').value,ids=w==='wedding'?['jt','jv','jm']:w==='janti'?['jt','jv','jm','rt','rv','rm']:['rt','rv','rm'];
-ids.forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return location.origin+'/'+$('l').value+$('w').value+'/'+(s?'?'+s:'')}
+ids.forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return location.href.split(/[?#]/)[0].replace(/link\/(index\.html)?$/,'')+$('l').value+$('w').value+'/'+(s?'?'+s:'')}
 function plain(){var p=$('p');p.innerHTML='';p.appendChild(row('Anyone (no name shown)',url(),mk(url())))}
 function upd(){$('gj').style.display=$('w').value==='reception'?'none':'';$('gr').style.display=$('w').value==='wedding'?'none':'';plain();$('o').innerHTML=''}
 ['w','l'].forEach(function(i){$(i).onchange=upd});['jt','jv','jm','rt','rv','rm'].forEach(function(i){$(i).oninput=upd});upd();

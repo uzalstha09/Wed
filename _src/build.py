@@ -6,7 +6,7 @@ import base64, json, os, sys, re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, '_src')
-SITE = 'https://invitationrecption.netlify.app'
+SITE = 'https://uzalstha09.github.io/Wed'
 WA = '9779813013735'
 
 PHOTO = base64.b64encode(open(os.path.join(SRC, 'couple_arch.jpg'), 'rb').read()).decode()
@@ -50,8 +50,8 @@ S = {
    cd='Counting down to', units=['Days', 'Hours', 'Mins', 'Secs'], day='The Day', loc='Location',
    viewloc='View Location', rsvp='RSVP', rsvpsub='Kindly let us know if you can join us',
    yname='Your name', attend='Will you attend the {e}?', yes='Joyfully yes', no='Sadly no',
-   guests='Number of guests', send='Send RSVP', sending='Sending…',
-   ok='Thank you! Your RSVP has been received.', err='Sorry, it could not be sent. Please try again or message us on WhatsApp.',
+   guests='Number of guests', send='Send RSVP on WhatsApp', sending='Opening WhatsApp…', yesw='Yes', now='No', gw='Guests', rsvpw='RSVP',
+   ok='Thank you! Please tap Send in WhatsApp to finish.', err='Sorry, it could not be sent. Please try again or message us on WhatsApp.',
    wa='Message us on WhatsApp', wamsg='Hello Ujjwal & Blesy, this is {n}.',
    thanks='With love', thankmsg='Your presence and blessings will make our celebration complete.',
    photo='Two hearts, one journey', months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -62,8 +62,8 @@ S = {
    cd='शुभ घडीसम्म', units=['दिन', 'घण्टा', 'मिनेट', 'सेकेन्ड'], day='शुभ दिन', loc='स्थान',
    viewloc='स्थान हेर्नुहोस्', rsvp='उपस्थिति', rsvpsub='कृपया आफ्नो उपस्थिति जानकारी गराउनुहोस्',
    yname='तपाईंको नाम', attend='{e}मा आउनुहुन्छ?', yes='हो, आउँछु', no='माफ गर्नुहोस्, आउन सक्दिनँ',
-   guests='जम्मा व्यक्ति', send='पठाउनुहोस्', sending='पठाउँदै…',
-   ok='धन्यवाद! तपाईंको जानकारी प्राप्त भयो।', err='माफ गर्नुहोस्, पठाउन सकिएन। फेरि प्रयास गर्नुहोस् वा WhatsApp मा सन्देश पठाउनुहोस्।',
+   guests='जम्मा व्यक्ति', send='WhatsApp मा पठाउनुहोस्', sending='WhatsApp खोल्दै…', yesw='आउँछु', now='आउन सक्दिनँ', gw='जम्मा व्यक्ति', rsvpw='उपस्थिति',
+   ok='धन्यवाद! पूरा गर्न WhatsApp मा Send थिच्नुहोस्।', err='माफ गर्नुहोस्, पठाउन सकिएन। फेरि प्रयास गर्नुहोस् वा WhatsApp मा सन्देश पठाउनुहोस्।',
    wa='WhatsApp मा सन्देश पठाउनुहोस्', wamsg='नमस्ते उज्ज्वल र ब्लेसी, म {n}।',
    thanks='स्नेहसहित', thankmsg='तपाईंको उपस्थिति र आशीर्वादले हाम्रो उत्सवलाई पूर्णता दिनेछ।',
    photo='दुई मन, एउटै यात्रा', months=['जनवरी', 'फेब्रुअरी', 'मार्च', 'अप्रिल', 'मे', 'जुन', 'जुलाई', 'अगस्ट', 'सेप्टेम्बर', 'अक्टोबर', 'नोभेम्बर', 'डिसेम्बर'],
@@ -193,12 +193,12 @@ NECSS = "*{letter-spacing:0!important;text-transform:none!important}.scr,.names,
 RULE = '<svg class="rule rv" style="--d:@@D@@s" viewBox="0 0 120 14"><g fill="none" stroke="currentColor" stroke-width=".8" opacity=".55"><path d="M0 7H48M72 7H120"/><path d="M60 1.5l5.5 5.5-5.5 5.5-5.5-5.5z"/><circle cx="52" cy="7" r="1.4"/><circle cx="68" cy="7" r="1.4"/></g></svg>'
 def rule(d): return RULE.replace('@@D@@', str(d))
 
-def build(page, lang, asset_prefix='/assets/', preview_fonts=None):
+def build(page, lang, asset_prefix='/Wed/assets/', preview_fonts=None):
     P, T = PAGES[page], S[lang]
     evs = [dict(k=k, label=EV[k]['label'][lang], date=EV[k]['date'], bs=EV[k]['bs'][lang], time=EV[k]['time'][lang], venue=EV[k]['venue'][lang], map=EV[k]['map']) for k in P['ev']]
     url = SITE + ('/ne/' if lang == 'ne' else '/') + page + '/'
     title = P['title'][lang] + ' — ' + T['groom'] + (' र ' if lang == 'ne' else ' & ') + T['bride']
-    cfg = dict(lang=lang, ev=evs, T={k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear']}, wa=WA)
+    cfg = dict(lang=lang, ev=evs, T={k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear', 'yesw', 'now', 'gw', 'rsvpw']}, wa=WA)
     rows = ''
     for e in evs:
         rows += ('<div class="f"><span class="l">' + esc(T['attend'].replace('{e}', e['label'])) + '</span><div class="pills">'
@@ -206,9 +206,7 @@ def build(page, lang, asset_prefix='/assets/', preview_fonts=None):
                  '<label><input type="radio" name="attend-' + e['k'] + '" value="no"><span>' + esc(T['no']) + '</span></label></div></div>')
     dig = str.maketrans('0123456789', '०१२३४५६७८९')
     opts = ''.join('<option value="%d">%s</option>' % (i, str(i) if lang == 'en' else str(i).translate(dig)) for i in range(1, 11))
-    form = ('<form name="' + P['form'] + '" method="POST" data-netlify="true" netlify-honeypot="bot" id="rf">'
-            '<input type="hidden" name="form-name" value="' + P['form'] + '"><input type="hidden" name="lang" value="' + lang + '">'
-            '<p class="hp"><label>Leave empty <input name="bot"></label></p>'
+    form = ('<form id="rf" novalidate>'
             '<div class="f"><label class="l" for="rn">' + esc(T['yname']) + '</label><input type="text" id="rn" name="name" required maxlength="80" autocomplete="name"></div>'
             + rows +
             '<div class="f"><label class="l" for="rg">' + esc(T['guests']) + '</label><select id="rg" name="guests">' + opts + '</select></div>'
@@ -238,7 +236,7 @@ def build(page, lang, asset_prefix='/assets/', preview_fonts=None):
 <style>{css}</style>{pf}</head><body>
 <canvas id="spk"></canvas>
 <button id="mute" type="button" aria-label="{esc(T['mute'])}">♪</button>
-{'<audio id="bgm" src="/music.mp3" loop preload="auto"></audio>' if HAS_MUSIC else ''}
+{'<audio id="bgm" src="{A}../music.mp3" loop preload="auto"></audio>' if HAS_MUSIC else ''}
 <div id="env" role="button" aria-label="{esc(T['hint'])}"><div class="stage">
  <div class="fl l"><img class="full" src="{A}env-left.webp" alt=""><div class="shade" style="--m:url({A}env-left.webp)"></div></div>
  <div class="fl r"><img class="full" src="{A}env-right.webp" alt=""><div class="shade" style="--m:url({A}env-right.webp)"></div></div>
@@ -335,11 +333,9 @@ function wa(){var n=($('rn').value||g||'').trim();$('wa').href='https://wa.me/'+
 wa();$('rn').addEventListener('input',wa);
 $('rf').addEventListener('submit',function(ev){ev.preventDefault();var f=this,b=f.querySelector('.send'),m=$('rmsg');
  for(var i=0;i<C.ev.length;i++){if(!f.querySelector('input[name="attend-'+C.ev[i].k+'"]:checked')){m.textContent=T.need;return}}
- var fd2=new FormData(f);fd2.append('page',location.pathname);if(g)fd2.append('link-name',g);
- b.disabled=true;var old=b.textContent;b.textContent=T.sending;m.textContent='';
- fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd2).toString()})
- .then(function(r){if(!r.ok)throw 0;m.textContent=T.ok;f.querySelectorAll('input,select,button').forEach(function(x){x.disabled=true});b.textContent='✓'})
- .catch(function(){m.textContent=T.err;b.disabled=false;b.textContent=old})});
+ var n=($('rn').value||'').trim();if(!n){$('rn').focus();return}
+ var lines=[T.rsvpw+' — '+n];C.ev.forEach(function(e){var v=f.querySelector('input[name="attend-'+e.k+'"]:checked').value;lines.push(e.label+': '+(v==='yes'?T.yesw:T.now))});lines.push(T.gw+': '+dv($('rg').value));
+ m.textContent=T.ok;location.href='https://wa.me/'+C.wa+'?text='+encodeURIComponent(lines.join('\n'))});
 /* reveal */
 var secs=document.querySelectorAll('.sec');
 var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.2}):null;
@@ -390,7 +386,7 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){for(var i=0;i<18;i++
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    out, pf, only, A = ROOT, None, None, '/assets/'
+    out, pf, only, A = ROOT, None, None, '/Wed/assets/'
     if '--preview' in args:
         out = args[args.index('--preview') + 1]
         pf = args[args.index('--fonts') + 1] if '--fonts' in args else None
