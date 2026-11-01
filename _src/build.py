@@ -401,5 +401,6 @@ if __name__ == '__main__':
                 continue
             d = os.path.join(out, 'ne', page) if lang == 'ne' else os.path.join(out, page)
             os.makedirs(d, exist_ok=True)
-            open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(build(page, lang, A, pf))
+            A2 = ('../assets/' if lang == 'en' else '../../assets/') if A == 'REL' else A
+            open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(build(page, lang, A2, pf))
             print('wrote', os.path.join(d, 'index.html'))
