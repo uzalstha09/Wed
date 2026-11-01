@@ -18,14 +18,14 @@ function f(n){return n.toFixed(1)}
 /* shared defs: emboss filter, pearl gradient, tulle, noise */
 var DEFS='<defs>'+
 '<filter id="emb" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">'+
- '<feGaussianBlur in="SourceAlpha" stdDeviation="0.9" result="b"/>'+
- '<feSpecularLighting in="b" surfaceScale="1.4" specularConstant=".28" specularExponent="26" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>'+
+ '<feGaussianBlur in="SourceAlpha" stdDeviation="0.6" result="b"/>'+
+ '<feSpecularLighting in="b" surfaceScale="1.7" specularConstant=".32" specularExponent="30" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>'+
  '<feComposite in="sp" in2="SourceAlpha" operator="in" result="sp2"/>'+
- '<feDiffuseLighting in="b" surfaceScale="1.3" diffuseConstant="1.12" lighting-color="#ffffff" result="df"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>'+
+ '<feDiffuseLighting in="b" surfaceScale="1.6" diffuseConstant="1.1" lighting-color="#ffffff" result="df"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>'+
  '<feComposite in="df" in2="SourceAlpha" operator="in" result="df2"/>'+
  '<feBlend in="SourceGraphic" in2="df2" mode="multiply" result="m"/>'+
- '<feComposite in="m" in2="sp2" operator="arithmetic" k1="0" k2="1" k3=".18" k4="0" result="lit"/>'+
- '<feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="sb"/><feOffset in="sb" dx="1.2" dy="1.8" result="so"/>'+
+ '<feComposite in="m" in2="sp2" operator="arithmetic" k1="0" k2="1" k3=".24" k4="0" result="lit"/>'+
+ '<feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="sb"/><feOffset in="sb" dx=".9" dy="1.3" result="so"/>'+
  '<feFlood flood-color="'+PAL.shd+'" flood-opacity=".2"/><feComposite in2="so" operator="in" result="sh"/>'+
  '<feMerge><feMergeNode in="sh"/><feMergeNode in="lit"/></feMerge></filter>'+
 '<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>'+
@@ -106,7 +106,8 @@ function lace(cv,opt){opt=opt||{};var p=cv.p,o=cv.o,n=p.length-1,r=opt.r||16,wid
    if(k%4==1)mo+=leaf(q.x,q.y,wid*.36,a-1.0)+leaf(q.x,q.y,wid*.3,a+Math.PI+1.0);else mo+=flower(q.x,q.y,wid*.15,k)}
  // sprays inward
  var spr='';if(opt.sprigs!==false){var cnt=Math.max(1,Math.floor(Ltot/(opt.sprayGap||110)));for(var i=0;i<cnt;i++){var idx=Math.round((i+.5)/cnt*(pts.length-1)),q=add(pts[idx],mul(os[idx],-wid-2));var ang=Math.atan2(-os[idx].y,-os[idx].x);spr+=spray(q,ang+(i%2?.35:-.35),opt.sprayLen||46,i%2?1:-1)}}
- return '<g filter="url(#emb)">'+g+cords+vin+'<g fill="'+PAL.lace+'">'+mo+spr+'</g></g>'}
+ var def='<path d="'+outer+'" fill="none" stroke="#9c8592" stroke-width="4.4" stroke-linejoin="round" opacity=".55"/>';
+ return def+'<g filter="url(#emb)">'+g+cords+vin+'<g fill="'+PAL.lace+'">'+mo+spr+'</g></g>'}
 /* fuller spray: stem with paired rounded leaves and 2-3 flowers */
 function spray(p,ang,L,side){var s='',n=12,pts=[];for(var i=0;i<=n;i++){var t=i/n,bend=side*Math.sin(t*Math.PI*.9)*L*.16;pts.push(P(p.x+Math.cos(ang)*L*t+Math.cos(ang+Math.PI/2)*bend,p.y+Math.sin(ang)*L*t+Math.sin(ang+Math.PI/2)*bend))}
  s+='<path d="M'+pts.map(function(q){return f(q.x)+' '+f(q.y)}).join('L')+'" fill="none" stroke="'+PAL.lace+'" stroke-width="2.2" stroke-linecap="round"/>';
