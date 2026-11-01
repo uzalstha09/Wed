@@ -19,14 +19,14 @@ function f(n){return n.toFixed(1)}
 var DEFS='<defs>'+
 '<filter id="emb" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">'+
  '<feGaussianBlur in="SourceAlpha" stdDeviation="0.9" result="b"/>'+
- '<feSpecularLighting in="b" surfaceScale="1.8" specularConstant=".45" specularExponent="22" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>'+
+ '<feSpecularLighting in="b" surfaceScale="1.4" specularConstant=".28" specularExponent="26" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>'+
  '<feComposite in="sp" in2="SourceAlpha" operator="in" result="sp2"/>'+
- '<feDiffuseLighting in="b" surfaceScale="1.7" diffuseConstant="1.08" lighting-color="#ffffff" result="df"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>'+
+ '<feDiffuseLighting in="b" surfaceScale="1.3" diffuseConstant="1.12" lighting-color="#ffffff" result="df"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>'+
  '<feComposite in="df" in2="SourceAlpha" operator="in" result="df2"/>'+
  '<feBlend in="SourceGraphic" in2="df2" mode="multiply" result="m"/>'+
- '<feComposite in="m" in2="sp2" operator="arithmetic" k1="0" k2="1" k3=".3" k4="0" result="lit"/>'+
+ '<feComposite in="m" in2="sp2" operator="arithmetic" k1="0" k2="1" k3=".18" k4="0" result="lit"/>'+
  '<feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="sb"/><feOffset in="sb" dx="1.2" dy="1.8" result="so"/>'+
- '<feFlood flood-color="'+PAL.shd+'" flood-opacity=".26"/><feComposite in2="so" operator="in" result="sh"/>'+
+ '<feFlood flood-color="'+PAL.shd+'" flood-opacity=".2"/><feComposite in2="so" operator="in" result="sh"/>'+
  '<feMerge><feMergeNode in="sh"/><feMergeNode in="lit"/></feMerge></filter>'+
 '<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>'+
 '<filter id="dropbig" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="5" result="o"/><feFlood flood-color="#3a2230" flood-opacity=".45"/><feComposite in2="o" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
@@ -98,6 +98,7 @@ function lace(cv,opt){opt=opt||{};var p=cv.p,o=cv.o,n=p.length-1,r=opt.r||16,wid
    for(var j=-1;j<=1;j+=2){var pc=add(add(m,mul(om,r*1.02)),mul(t,j*r*.55));mo+='<circle cx="'+f(pc.x)+'" cy="'+f(pc.y)+'" r="1.5"/>'}  // picots
    var pk=add(m,mul(om,r*1.12));mo+='<circle cx="'+f(pk.x)+'" cy="'+f(pk.y)+'" r="1.8"/>';
  }
+ if(opt.rich){var inner2='M';for(var k=0;k<pts.length;k++){var q=add(pts[k],mul(os[k],-wid*.82));inner2+=(k?'L':'')+f(q.x)+' '+f(q.y)}cords+='<path d="'+inner2+'" fill="none" stroke="'+PAL.lace+'" stroke-width="1.4" stroke-dasharray="1.5 3" stroke-linecap="round"/>';for(var k=0;k<ns;k++){var m=pts[k*4+2],om=os[k*4+2];var c2=add(m,mul(om,r*.62));mo+='<path d="M'+f(c2.x)+' '+f(c2.y)+'m-'+f(r*.42)+' 0a'+f(r*.42)+' '+f(r*.42)+' 0 1 0 '+f(r*.84)+' 0a'+f(r*.42)+' '+f(r*.42)+' 0 1 0 -'+f(r*.84)+' 0" fill="none" stroke="'+PAL.lace+'" stroke-width="1.1"/>'}}
  // wavy vine inside band with leaves and flowers
  var vine='M';for(var k=0;k<pts.length;k++){var w=Math.sin(k/4*Math.PI)*wid*.18,q=add(pts[k],mul(os[k],-wid*.55+w));vine+=(k?'L':'')+f(q.x)+' '+f(q.y)}
  var vin='<path d="'+vine+'" fill="none" stroke="'+PAL.lace+'" stroke-width="1.8"/>';
@@ -137,15 +138,18 @@ function edgeDist(p,poly){var m=1e9;for(var i=0,j=poly.length-1;i<poly.length;j=
 
 /* flap: corners A,B on the screen edge, apex X. free edges are gently concave curves */
 function flap(A,B,X,id,tint,bow){var cen=P((A.x+B.x+X.x)/3,(A.y+B.y+X.y)/3);bow=bow||26;
- var c1=curve(A,X,bow,P(2*X.x-cen.x,2*X.y-cen.y),40),c2=curve(X,B,bow,P(2*X.x-cen.x,2*X.y-cen.y),40);
- // outward normals must point away from the flap body
+ var c1=curve(A,X,bow,P(2*X.x-cen.x,2*X.y-cen.y),48),c2=curve(X,B,bow,P(2*X.x-cen.x,2*X.y-cen.y),48);
  function fix(cv){for(var i=0;i<cv.o.length;i++){var q=cv.p[i];if(cv.o[i].x*(q.x-cen.x)+cv.o[i].y*(q.y-cen.y)<0)cv.o[i]=mul(cv.o[i],-1)}return cv}
  c1=fix(c1);c2=fix(c2);
  var poly=c1.p.concat(c2.p.slice(1));
- var s='<g filter="url(#dropbig)"><g style="filter:brightness('+(tint||1)+')">'+satin(poly,id)+tulle([A,B],X,id)+'</g></g>';
- s+=scatterPearls(poly,X,8);
- s+=lace(c1)+lace(c2);
+ var s='<g filter="url(#dropbig)"><g style="filter:brightness('+(tint||1)+')">'+satin(poly,id)+gather(poly,X,id)+'</g></g>';
+ s+=scatterPearls(poly,X,6);
+ s+=lace(c1,{r:21,w:58,sprigs:false,rich:true})+lace(c2,{r:21,w:58,sprigs:false,rich:true});
  return s}
+/* soft gathered tulle radiating from the apex (under the seal) */
+function gather(poly,X,id){var s='<g clip-path="url(#c'+id+')">';
+ for(var i=0;i<26;i++){var a=rnd()*Math.PI*2,L=60+rnd()*150,w=6+rnd()*16;s+='<path d="M'+f(X.x)+' '+f(X.y)+'L'+f(X.x+Math.cos(a)*L)+' '+f(X.y+Math.sin(a)*L)+'" stroke="#fff" stroke-opacity="'+(.05+rnd()*.07).toFixed(2)+'" stroke-width="'+f(w)+'" stroke-linecap="round" style="filter:blur(5px)"/>'}
+ s+='<circle cx="'+f(X.x)+'" cy="'+f(X.y)+'" r="120" fill="url(#net)" opacity=".25"/></g>';return s}
 
 function seal(cx,cy,rx,ry){var pts=[],N=140;for(var i=0;i<N;i++){var t=i/N*Math.PI*2,k=1+.035*Math.sin(t*7+1)+.02*Math.sin(t*13)+.015*Math.sin(t*3+2);pts.push(f(cx+rx*1.12*k*Math.cos(t))+' '+f(cy+ry*1.12*k*Math.sin(t)))}
  var wreath='';for(var i=0;i<22;i++){var a=i/22*Math.PI*2;var x=cx+Math.cos(a)*rx*.78,y=cy+Math.sin(a)*ry*.8;wreath+=leaf(x,y,9,a+Math.PI/2+(i%2?.5:-.5));if(i%4==0)wreath+=flower(x,y,4,a)}
