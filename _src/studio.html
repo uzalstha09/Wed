@@ -37,7 +37,7 @@ var DEFS='<defs>'+
 '<pattern id="lnet" width="6" height="5.2" patternUnits="userSpaceOnUse"><path d="M0 2.6L1.5 0H4.5L6 2.6L4.5 5.2H1.5Z" fill="none" stroke="#f3ebee" stroke-width=".7"/></pattern>'+
 '</defs>';
 
-function pearl(x,y,r){return '<circle cx="'+f(x+r*.25)+'" cy="'+f(y+r*.45)+'" r="'+f(r*1.05)+'" fill="#4a3040" opacity=".28" filter="url(#soft)" style="filter:blur('+f(r*.35)+'px)"/><circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r)+'" fill="url(#pearl)"/><circle cx="'+f(x-r*.35)+'" cy="'+f(y-r*.38)+'" r="'+f(r*.28)+'" fill="#fff" opacity=".85"/>'}
+function pearl(x,y,r){r=r*.8;return '<circle cx="'+f(x+r*.25)+'" cy="'+f(y+r*.45)+'" r="'+f(r*1.05)+'" fill="#4a3040" opacity=".28" filter="url(#soft)" style="filter:blur('+f(r*.35)+'px)"/><circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r)+'" fill="url(#pearl)"/><circle cx="'+f(x-r*.35)+'" cy="'+f(y-r*.38)+'" r="'+f(r*.28)+'" fill="#fff" opacity=".85"/>'}
 
 /* five-petal flower */
 function flower(x,y,r,rot){var s='';for(var i=0;i<5;i++){var a=rot+i*Math.PI*2/5,cx=x+Math.cos(a)*r*.62,cy=y+Math.sin(a)*r*.62;s+='<ellipse cx="'+f(cx)+'" cy="'+f(cy)+'" rx="'+f(r*.55)+'" ry="'+f(r*.38)+'" transform="rotate('+f(a*180/Math.PI)+' '+f(cx)+' '+f(cy)+')"/>'}return s+'<circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r*.28)+'"/>'}
@@ -144,8 +144,8 @@ function flap(A,B,X,id,tint,bow){var cen=P((A.x+B.x+X.x)/3,(A.y+B.y+X.y)/3);bow=
  c1=fix(c1);c2=fix(c2);
  var poly=c1.p.concat(c2.p.slice(1));
  var s='<g filter="url(#dropbig)"><g style="filter:brightness('+(tint||1)+')">'+satin(poly,id)+gather(poly,X,id)+'</g></g>';
- s+=scatterPearls(poly,X,6);
- s+=lace(c1,{r:21,w:58,sprigs:false,rich:true})+lace(c2,{r:21,w:58,sprigs:false,rich:true});
+ s+=scatterPearls(poly,X,7);
+ s+=lace(c1,{r:15,w:42,sprigs:false,rich:true})+lace(c2,{r:15,w:42,sprigs:false,rich:true});
  return s}
 /* soft gathered tulle radiating from the apex (under the seal) */
 function gather(poly,X,id){var s='<g clip-path="url(#c'+id+')">';
