@@ -186,6 +186,38 @@ body.rd #mute.on{display:flex}
 #spk{position:fixed;inset:0;margin:0 auto;width:100%;max-width:460px;height:100%;pointer-events:none;z-index:20;opacity:.8}
 @media (prefers-reduced-motion:reduce){.rv,.sec>.bg{transition:none!important;transform:none!important;opacity:1!important;filter:none!important}}
 @@NECSS@@
+
+body.rd{overflow:hidden}
+.one .win{width:70%;transform-origin:50% 50%;will-change:transform}
+.names1{font:400 50px/1.15 var(--sc);color:var(--deep);white-space:nowrap;margin:8px 0 2px}
+.names1 i{font:italic 400 24px var(--bd);color:#9b7f8d;vertical-align:middle}
+.inv{font:italic 400 16.5px/1.45 var(--bd);max-width:26ch;margin:4px auto 0}
+.one .rule{margin:12px auto}
+.evg{display:grid;gap:14px;width:100%}
+.evg.n2{grid-template-columns:1fr 1fr}
+.ec{display:flex;flex-direction:column;align-items:center}
+.evg.n2 .ec+.ec{border-left:1px solid #b9a0ad66}
+.ec .cap{font-size:10.5px;margin-bottom:5px}
+.ec .d1{font:500 15px/1.3 var(--bd);color:var(--deep)}
+.ec .bs{font:italic 400 13.5px var(--bd);color:#8a6f7d;margin-top:1px}
+.ec .tm{font:500 14.5px var(--bd);color:var(--deep);margin-top:5px}
+.ec .vn{font:600 13px/1.3 var(--bd);color:#6e5060;margin-top:2px;max-width:16ch}
+.ec .lk{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:6px 11px;white-space:nowrap;border:1px solid #9b7f8d88;border-radius:30px;font:500 9.5px var(--bd);letter-spacing:.14em;text-transform:uppercase;color:var(--deep);text-decoration:none}
+.cds{display:flex;justify-content:center;gap:0;margin-top:16px}
+.cds div{padding:0 11px;border-left:1px solid #b9a0ad77}.cds div:first-child{border-left:0}
+.cds b{display:block;font:400 22px/1 var(--bd);color:var(--deep)}
+.cds span{display:block;margin-top:3px;font:500 8.5px var(--bd);letter-spacing:.2em;text-transform:uppercase;color:#8a6f7d}
+.acts{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px}
+.rbtn{padding:12px 34px;border:0;border-radius:40px;background:var(--deep);color:#f6eef2;font:600 11px var(--bd);letter-spacing:.32em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 16px #4b253744}
+.one .wa{color:#7b5f6e;border-bottom-color:#9b7f8d66;margin-top:0;font-size:10px}
+.bless{font:italic 400 14px/1.4 var(--bd);color:#7b5f6e;margin-top:14px;max-width:28ch}
+#rmodal{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#2a122088;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
+#rmodal.on{opacity:1;visibility:visible;transition:opacity .35s}
+#rmodal .panel{position:relative;width:min(92%,410px);max-height:92vh;overflow:auto;padding:30px 24px 24px;border-radius:18px;background:url(@@A@@plum.webp) center/cover,#4b2537;color:#eadde3;text-align:center;box-shadow:0 20px 50px #0008;transform:translateY(20px) scale(.98);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+#rmodal.on .panel{transform:none}
+#rmodal .x{position:absolute;top:10px;right:12px;width:34px;height:34px;border:0;background:none;color:#eadde3;font-size:26px;line-height:1;cursor:pointer}
+#rmodal .scr{color:#f1e7ec}
+#rmodal form{margin-top:16px}
 """
 
 NECSS = "*{letter-spacing:0!important;text-transform:none!important}.scr,.names,.dear,.tag b{line-height:1.35}.names{font-size:56px}.scr{font-size:44px}.cap,.dates div,.ev .mo,.ev .bs{font-size:14px}"
@@ -245,57 +277,23 @@ def build(page, lang, asset_prefix='/Wed/assets/', preview_fonts=None):
  <div class="fl t"><img class="full" src="{A}env-top.webp" alt=""><div class="shade" style="--m:url({A}env-top.webp)"></div><img id="seal" src="{A}seal.webp" alt=""></div>
 </div><div class="hint">{esc(T['hint'])}</div></div>
 <div id="app">
- <section class="sec hero" id="hero"><div class="bg"></div>
-  <div class="win">
+ <section class="sec hero one" id="hero"><div class="bg"></div>
+  <div class="win" id="win">
    <div class="dear rv" style="--d:.1s" id="dearn"></div>
-   <div class="cap rv" style="--d:.3s">{esc(T['together'])}</div>
-   <div class="names rv" style="--d:.55s">{esc(T['groom'])}<i>{esc(T['amp'])}</i>{esc(T['bride'])}</div>
-   <div class="full rv" style="--d:.75s">{esc(T['full'])}</div>
-   {rule(.9)}
-   <p class="txt rv" style="--d:1s">{esc(P['invite'][lang])}</p>
-   <div class="dates rv" style="--d:1.2s" id="hdates"></div>
-  </div>
-  <div class="cue rv" style="--d:1.8s">{'तल सार्नुहोस्' if lang=='ne' else 'Scroll'}</div>
- </section>
- <section class="sec dk"><div class="bg"></div><div class="trim tp"></div>
-  <div class="cap rv">{esc(T['groom'])}{esc(sep)}{esc(T['bride'])}</div>
-  <div class="ph rv" style="--d:.25s"><div class="pic"><img alt="" src="data:image/jpeg;base64,{PHOTO}"></div><img class="lace" src="{A}frame.webp" alt=""></div>
-  <div class="scr rv" style="--d:.5s;margin-top:14px">{esc(T['photo'])}</div>
-  <div class="trim bt"></div>
- </section>
- <section class="sec lt"><div class="bg"></div>
-  <div class="cap rv">{esc(T['cd'])}</div>
-  <div class="scr rv" style="--d:.15s;margin-top:6px" id="cdl"></div>
-  <div class="cd rv" style="--d:.35s" id="cd"></div>
-  <div class="cdt rv" style="--d:.5s" id="cdt"></div>
- </section>
- <section class="sec dk"><div class="bg"></div><div class="trim tp"></div>
-  <div class="scr rv">{esc(T['day'])}</div>
-  {rule(.15)}
-  <div class="evs" id="evs"></div>
-  <div class="trim bt"></div>
- </section>
- <section class="sec lt"><div class="bg"></div>
-  <div class="scr rv">{esc(T['loc'])}</div>
-  {rule(.15)}
-  <div class="loc" id="locs"></div>
- </section>
- <section class="sec dk"><div class="bg"></div><div class="trim tp"></div>
-  <div class="scr rv">{esc(T['rsvp'])}</div>
-  <p class="txt rv" style="--d:.15s;margin-top:10px">{esc(T['rsvpsub'])}</p>
-  <div class="rv" style="--d:.3s;width:100%">{form}</div>
-  <a class="wa rv" style="--d:.45s" id="wa" href="https://wa.me/{WA}" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>{esc(T['wa'])}</a>
-  <div class="trim bt"></div>
- </section>
- <section class="sec lt end"><div class="bg"></div>
-  <div class="win" style="width:72%;display:flex;flex-direction:column;align-items:center">
-   <div class="cap rv">{esc(T['thanks'])}</div>
-   <div class="names rv" style="--d:.25s">{esc(T['groom'])}<i>{esc(T['amp'])}</i>{esc(T['bride'])}</div>
-   {rule(.45)}
-   <p class="txt rv" style="--d:.6s">{esc(T['thankmsg'])}</p>
+   <div class="cap rv" style="--d:.25s">{esc(T['together'])}</div>
+   <div class="names1 rv" style="--d:.45s">{esc(T['groom'])} <i>{esc(T['amp'])}</i> {esc(T['bride'])}</div>
+   <p class="inv rv" style="--d:.6s">{esc(P['invite'][lang])}</p>
+   {rule(.7)}
+   <div class="evg rv" style="--d:.8s" id="evs"></div>
+   <div class="cds rv" style="--d:1s" id="cd"></div>
+   <div class="acts rv" style="--d:1.15s"><button type="button" class="rbtn" id="ropen">{esc(T['rsvp'])}</button>
+    <a class="wa" id="wa" href="https://wa.me/{WA}" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>{esc(T['wa'])}</a></div>
+   <p class="bless rv" style="--d:1.3s">{esc(T['thankmsg'])}</p>
   </div>
  </section>
 </div>
+<div id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-label="{esc(T['rsvp'])}"><button type="button" class="x" id="rclose" aria-label="Close">×</button>
+ <div class="scr" style="font-size:44px">{esc(T['rsvp'])}</div><p class="txt" style="font-size:16px;margin-top:4px">{esc(T['rsvpsub'])}</p>{form}</div></div>
 <script>var C={json.dumps(cfg, ensure_ascii=False)};</script>
 <script>{JS}</script>
 </body></html>"""
@@ -317,15 +315,17 @@ var RS='';function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg&&t
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
 function render(){
-$('hdates').innerHTML=C.ev.map(function(e){return '<div>'+esc(e.label)+' · '+fd(D(e))+'<span>'+esc(e.bs)+(e.time?' · '+esc(e.time):'')+'</span></div>'}).join('');
-$('evs').innerHTML=C.ev.map(function(e,i){var d=D(e),tv=[e.time,e.venue].filter(Boolean).join(' · ');return '<div class="ev rv" style="--d:'+(.3+i*.2)+'s"><div class="cap">'+esc(e.label)+'</div><div class="dn">'+dv(d.getDate())+'</div><div class="mo">'+T.months[d.getMonth()]+' '+dv(d.getFullYear())+'</div><div class="wd">'+T.wd[d.getDay()]+'</div><div class="bs">'+esc(e.bs)+'</div>'+(tv?'<div class="tv">'+esc(tv)+'</div>':'')+'</div>'}).join('');
-$('locs').innerHTML=C.ev.map(function(e,i){var d=D(e);return '<div class="lc rv" style="--d:'+(.3+i*.2)+'s"><div class="cap">'+esc(e.label)+'</div>'+(e.venue?'<div class="vn">'+esc(e.venue)+'</div>':'')+'<div class="dt">'+T.wd[d.getDay()]+', '+fd(d)+(e.time?' · '+esc(e.time):'')+'</div>'+(e.map?'<a class="btn" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="12" height="15" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
+var ev=$('evs');ev.className='evg rv'+(C.ev.length>1?' n2':'');
+ev.innerHTML=C.ev.map(function(e){var d=D(e);return '<div class="ec"><div class="cap">'+esc(e.label)+'</div><div class="d1">'+T.wd[d.getDay()]+'<br>'+fd(d)+'</div><div class="bs">'+esc(e.bs)+'</div>'+(e.time?'<div class="tm">'+esc(e.time)+'</div>':'')+(e.venue?'<div class="vn">'+esc(e.venue)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="9" height="12" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
+if(window.fitWin)fitWin();
 }
 applyCfg(null);render();
 try{var cc=localStorage.getItem('wcfg');if(cc){applyCfg(JSON.parse(cc));render();if(RS){var sb0=document.querySelector('#rf .send');if(sb0)sb0.textContent=T.send2}}}catch(e){}
 try{fetch(CFGURL+'?t='+Math.floor(Date.now()/60000),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(cfg){if(!cfg)return;try{localStorage.setItem('wcfg',JSON.stringify(cfg))}catch(e){}applyCfg(cfg);render();if(RS){var sb=document.querySelector('#rf .send');if(sb)sb.textContent=T.send2}}).catch(function(){})}catch(e){}
-var tgt=D(C.ev[0]);$('cdl').textContent=C.ev[0].label;$('cdt').textContent=T.wd[tgt.getDay()]+', '+fd(tgt);
+var tgt=D(C.ev[0]);
 $('cd').innerHTML=T.units.map(function(u){return '<div><b>00</b><span>'+esc(u)+'</span></div>'}).join('');
+window.fitWin=function(){var w=$('win');if(!w)return;w.style.transform='none';var vw=Math.min(innerWidth,460),k=Math.min(1,innerHeight*.69/w.offsetHeight,vw*.70/w.offsetWidth);w.style.transform='scale('+k.toFixed(3)+')'};fitWin();addEventListener('resize',fitWin);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitWin);
+var rm=$('rmodal');$('ropen').onclick=function(){rm.classList.add('on');rm.setAttribute('aria-hidden','false')};function rcl(){rm.classList.remove('on');rm.setAttribute('aria-hidden','true')}$('rclose').onclick=rcl;rm.addEventListener('click',function(e){if(e.target===rm)rcl()});
 var cb=$('cd').querySelectorAll('b');
 function tick(){var s=Math.max(0,Math.floor((tgt-new Date())/1000)),v=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];for(var i=0;i<4;i++)cb[i].textContent=dv(String(v[i]).padStart(2,'0'))}
 tick();setInterval(tick,1000);
