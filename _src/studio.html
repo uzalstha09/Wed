@@ -163,8 +163,8 @@ function seal(cx,cy,rx,ry){var pts=[],N=140;for(var i=0;i<N;i++){var t=i/N*Math.
 /* ---------- assets ---------- */
 var C=P(W/2,H*.5),body='';
 if(A==='top'){var X=P(W/2,H*.545);body=flap(P(-8,-8),P(W+8,-8),X,'t',1.02,55);}
-if(A==='left'){var poly=[P(-8,-8),P(W*.5+2,-8),P(W*.5+2,H+8),P(-8,H+8)];body='<g style="filter:brightness(.95)">'+satin(poly,'l',-20)+'</g>'+scatterPearls([P(0,H*.2),P(W*.42,H*.5),P(0,H*.8)],P(W*.5,H*.5),4);}
-if(A==='right'){var poly=[P(W*.5-2,-8),P(W+8,-8),P(W+8,H+8),P(W*.5-2,H+8)];body='<g style="filter:brightness(.95)">'+satin(poly,'r',-20)+'</g>'+scatterPearls([P(W,H*.2),P(W,H*.8),P(W*.58,H*.5)],P(W*.5,H*.5),4);}
+if(A==='left'){var poly=[P(-8,-8),P(W*.30,-8),P(W*.62,H*.5),P(W*.30,H+8),P(-8,H+8)];body='<g filter="url(#dropbig)"><g style="filter:brightness(.95)">'+satin(poly,'l',-20)+'</g></g>'+scatterPearls([P(0,H*.25),P(W*.38,H*.5),P(0,H*.75)],P(W*.5,H*.5),3);}
+if(A==='right'){var poly=[P(W+8,-8),P(W*.70,-8),P(W*.38,H*.5),P(W*.70,H+8),P(W+8,H+8)];body='<g filter="url(#dropbig)"><g style="filter:brightness(.93)">'+satin(poly,'r',-20)+'</g></g>'+scatterPearls([P(W,H*.25),P(W,H*.75),P(W*.62,H*.5)],P(W*.5,H*.5),3);}
 if(A==='bottom'){var X=P(W/2,H*.455);body=flap(P(W+8,H+8),P(-8,H+8),X,'b',.98,55);}
 if(A==='seal'){body=seal(W/2,H/2,W*.36,H*.4);}
 if(A==='inner'){ // satin base visible under flaps (the card)
