@@ -78,12 +78,12 @@ if(A==='base'){ // body: side + bottom flaps, florals; top triangle shows envelo
  body+='<polyline points="0,0 '+AX+','+f(H*.47)+' '+W+',0" fill="none" stroke="#b9b2c6" stroke-width="1" filter="url(#crease)"/>';
  body+='<g filter="url(#drop)"><g clip-path="url(#botclip)">'+paper()+'</g></g>';
  body+='<polyline points="0,'+H+' '+AX+','+BY+' '+W+','+H+'" fill="none" stroke="#ffffff" stroke-width="1.1" opacity=".75"/>';
- body+=vine(W*.16,H*.30,H*.74,1)+vine(W*.84,H*.30,H*.74,-1);
- body+=bouquet(W*.5,H*.79,W*.98,true);
+ if(!q.get('nof')){body+=vine(W*.16,H*.30,H*.74,1)+vine(W*.84,H*.30,H*.74,-1);
+ body+=bouquet(W*.5,H*.79,W*.98,true);}
 }
 if(A==='flap'){ // top flap front
  body='<clipPath id="fc"><polygon points="-2,-2 '+(W+2)+',-2 '+AX+','+AY+'"/></clipPath><g filter="url(#drop)"><g clip-path="url(#fc)">'+paper('#ebe8f1')+'</g></g>';
- body+='<g clip-path="url(#fc)">'+bouquet(W*.5,H*.17,W*.84,false)+'</g>';
+ if(!q.get('nof'))body+='<g clip-path="url(#fc)">'+bouquet(W*.5,H*.17,W*.84,false)+'</g>';
  body+='<polyline points="0,0 '+AX+','+AY+' '+W+',0" fill="none" stroke="#ffffff" stroke-width="1.2" opacity=".7"/>';
 }
 if(A==='flapback'){ // inside of top flap
@@ -92,6 +92,8 @@ if(A==='flapback'){ // inside of top flap
 if(A==='glow'){ // bright version of florals for the shimmer
  C.em='#ffffff';var g=vine(W*.16,H*.30,H*.74,1)+vine(W*.84,H*.30,H*.74,-1)+bouquet(W*.5,H*.79,W*.98,true);
  body='<g filter="url(#glow)" opacity=".95">'+g.replace(/filter="url\(#emb\)"/g,'')+'</g>';}
+if(A==='hbase'){body=vine(W*.16,H*.30,H*.74,1)+vine(W*.84,H*.30,H*.74,-1)+bouquet(W*.5,H*.79,W*.98,true)}
+if(A==='hflap'){body=bouquet(W*.5,H*.17,W*.84,false)}
 if(A==='glowflap'){C.em='#ffffff';var g=bouquet(W*.5,H*.17,W*.84,false);body='<g filter="url(#glow)" opacity=".95">'+g.replace(/filter="url\(#emb\)"/g,'')+'</g>'}
 if(A==='seal'){ // white wax seal with gold line wreath
  var cx=W/2,cy=H/2,R=Math.min(W,H)*.42,pts=[];for(var i=0;i<160;i++){var t=i/160*Math.PI*2,k=1+.045*Math.sin(t*6+1)+.03*Math.sin(t*11+2)+.02*Math.sin(t*17);pts.push(f(cx+R*k*Math.cos(t))+' '+f(cy+R*k*.96*Math.sin(t)))}
@@ -147,6 +149,10 @@ if(A==='details'){ // second page: paper with side vines and a small bouquet top
  body=paper()+vine(W*.09,H*.08,H*.92,1)+vine(W*.91,H*.08,H*.92,-1)+bouquet(W*.5,H*.06,W*.6,false)+bouquet(W*.5,H*.95,W*.62,false);
 }
 
+var HMODE=q.get('hm');
+if(HMODE){body=body.replace(/filter="url\(#emb\)"/g,'filter="url(#hf)" style="mix-blend-mode:plus-lighter"').replace(/fill="#f[0-9a-f]{5}"/gi,'fill="#fff"').replace(/stroke="#f[0-9a-f]{5}"/gi,'stroke="#fff"');
+ DEFS=DEFS.replace('</defs>','<filter id="hf" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="linearRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="'+(q.get('hb')||0.9)+'" result="b"/><feFlood flood-color="rgb(46,46,46)"/><feComposite in2="b" operator="in"/></filter></defs>');
+ body='<rect width="'+W+'" height="'+H+'" fill="#000"/>'+body.replace(/<rect width="[^"]+" height="[^"]+" fill="#[0-9a-f]{6}"\/>/gi,'').replace(/<g filter="url\(#drop\)">[\s\S]*?<\/g><\/g>/,'');}
 document.getElementById('out').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+DEFS+body+'</svg>';
 document.title='ready';
 </script></body></html>
