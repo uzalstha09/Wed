@@ -20,11 +20,12 @@ body.rd{overflow-y:auto}
 #flap .bk{transform:rotateX(180deg)}
 #seal{position:absolute;left:50%;top:44.5%;width:37%;height:auto;transform:translate(-50%,-50%);will-change:transform}
 #rays{position:absolute;left:50%;top:47%;width:260%;aspect-ratio:1;transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;will-change:transform,opacity;mix-blend-mode:screen;
- background:radial-gradient(circle,#fffdf6 0,#fff1d8b0 3%,#ffe6c050 8%,transparent 16%),repeating-conic-gradient(from 2deg,#ffe8c400 0deg,#ffeccfdd 1.4deg,#ffe8c400 3.4deg,#ffe8c400 7deg,#ffe3b8a0 8.2deg,#ffe8c400 10deg,#ffe8c400 13deg);
+ background:radial-gradient(circle,#fffdf6 0,#ffe9c6c8 3%,#ffd9a860 8%,transparent 16%),repeating-conic-gradient(from 2deg,#ffe8c400 0deg,#ffd9a6ee 1.4deg,#ffe8c400 3.4deg,#ffe8c400 7deg,#ffd59cb8 8.2deg,#ffe8c400 10deg,#ffe8c400 13deg);
  -webkit-mask:radial-gradient(circle,transparent 2%,#000 4%,#000c 14%,#0005 27%,transparent 46%);mask:radial-gradient(circle,transparent 2%,#000 4%,#000c 14%,#0005 27%,transparent 46%)}
 
 #hole{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;pointer-events:none;will-change:opacity,transform;transform-origin:50% 47%;clip-path:polygon(41% 40%,59% 40%,61.5% 47%,59% 55%,41% 55%,38.5% 47%);background:radial-gradient(ellipse 16% 10% at 50% 47%,#ffffff 0,#f6f8ff 45%,#e2e6fa 100%);filter:blur(1.5px)}
 #wedge{position:absolute;inset:0;opacity:0;pointer-events:none;will-change:opacity;background:linear-gradient(90deg,transparent 22%,#7d769140 38%,transparent 41%,transparent 59%,#7d769140 62%,transparent 78%);clip-path:polygon(0 0,100% 0,62% 47%,100% 100%,0 100%,38% 47%)}
+#fsh{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(#0000 20%,#3c35501f 46%);clip-path:polygon(0 0,100% 0,50% 44.5%)}
 #flash{position:fixed;inset:0;margin:0 auto;max-width:460px;background:#fffdf9;opacity:0;pointer-events:none;z-index:15;will-change:opacity}
 .spk{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;opacity:0;pointer-events:none;will-change:transform,opacity;background:radial-gradient(circle,#fff 0,#fff 18%,transparent 60%)}
 .spk:before,.spk:after{content:'';position:absolute;left:50%;top:50%;background:linear-gradient(90deg,transparent,#fff,transparent);transform:translate(-50%,-50%)}
@@ -113,7 +114,7 @@ body.rd #mute.on{display:flex}
  <div id="wedge"></div><div id="hole"></div><div id="rays"></div>
  <img class="lay glow" id="g1" src="../../assets2/env-glow.webp" alt="">
  <div id="spks"></div>
- <div id="flap"><div class="fc"><img class="lay" src="../../assets2/env-flap.webp" alt=""><img class="lay glow" id="g2" src="../../assets2/env-glowflap.webp" alt=""><img id="seal" src="../../assets2/seal.webp" alt=""></div><div class="bk"><img class="lay" src="../../assets2/env-flapback.webp" alt=""></div></div>
+ <div id="flap"><div class="fc"><img class="lay" src="../../assets2/env-flap.webp" alt=""><img class="lay glow" id="g2" src="../../assets2/env-glowflap.webp" alt=""><div id="fsh"></div><img id="seal" src="../../assets2/seal.webp" alt=""></div><div class="bk"><img class="lay" src="../../assets2/env-flapback.webp" alt=""></div></div>
 </div><div class="forn" id="forn"></div><div class="hint">खोल्न ट्याप गर्नुहोस्</div><b id="tagn" hidden></b></div>
 <div id="flash"></div>
 <div id="app">
@@ -219,7 +220,7 @@ function open(user){if(opened)return;if(!ready){want=user;return}opened=true;env
  SP.forEach(function(s,i){var dl=300+Math.random()*2500;an(s,[{opacity:0,transform:'scale(.2) rotate(0deg)'},{opacity:1,transform:'scale(1) rotate(45deg)',offset:.4},{opacity:0,transform:'scale(.3) rotate(90deg)'}],{duration:700+Math.random()*500,delay:dl,easing:'ease-in-out'})});
  // 3. top flap lifts open on its hinge (towards the viewer) carrying the seal
  an(flap,[{transform:'translateZ(1px) rotateX(0deg)'},{transform:'translateZ(1px) rotateX(6deg)',offset:.2},{transform:'translateZ(1px) rotateX(47deg)'}],{duration:2300,delay:3000,easing:'cubic-bezier(.45,0,.25,1)'});
- var hole=$('hole'),wedge=$('wedge');
+ var hole=$('hole'),wedge=$('wedge');an($('fsh'),[{opacity:0},{opacity:1}],{duration:2300,delay:3000,easing:'ease-in'});
  an(wedge,[{opacity:0},{opacity:1}],{duration:1600,delay:3500,easing:'ease-out'});
  an(hole,[{opacity:0,transform:'scaleY(.15)'},{opacity:1,transform:'scaleY(1)'}],{duration:1500,delay:3700,easing:'cubic-bezier(.3,0,.2,1)'});
  // 4. light pours out of the opening
