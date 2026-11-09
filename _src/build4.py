@@ -197,6 +197,7 @@ body.rd{overflow:hidden}
 .info{position:absolute;top:47%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;transform-origin:50% 0}
 .info .evg.n2 .ec+.ec{border-left:1px solid #d8bf9a}
 .info .acts{margin-top:14px}
+#rmodal{display:none!important}
 /* alignment + legibility */
 .hero .txt{position:absolute;z-index:3;text-align:center;transform-origin:50% 0;left:13%!important;right:13%!important;top:12.5%!important;display:flex;flex-direction:column;align-items:center;padding:10px 6px 14px;
  background:radial-gradient(ellipse 60% 55% at 50% 50%,#fffaf2e6 0,#fffaf2b8 55%,#fffaf200 100%)}
@@ -289,7 +290,7 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
   <div class="info" id="win">
    <div class="evg rv" style="--d:.85s" id="evs"></div>
    <div class="cds rv" style="--d:1s" id="cd"></div>
-   <div class="acts rv" style="--d:1.15s"><button type="button" class="rbtn" id="ropen">{esc(T['rsvp'])}</button></div>
+   <button type="button" class="rbtn" id="ropen" hidden></button>
    <a class="wa" id="wa" href="https://wa.me/{WA}" rel="noopener" hidden></a>
    <div id="dearn" hidden></div>
   </div>
