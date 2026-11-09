@@ -14,9 +14,12 @@ body.rd{overflow-y:auto}
 #env{position:fixed;inset:0;margin:0 auto;width:100%;max-width:460px;z-index:10;cursor:pointer;overflow:hidden;perspective:2400px;perspective-origin:50% 40%;background:#e8e5ee}
 #env{background:#efecee}
 #env .stage{position:absolute;left:50%;top:50%;width:max(100%,calc(100vh*941/1672));aspect-ratio:941/1672;transform:translate(-50%,-50%);transform-style:preserve-3d}
-#eShine{opacity:0;mix-blend-mode:normal;filter:brightness(1.3) drop-shadow(0 0 4px #fff) drop-shadow(0 0 2px #fff);-webkit-mask:linear-gradient(115deg,transparent 20%,#000 40%,#000 60%,transparent 80%) 0 0/250% 250%;mask:linear-gradient(115deg,transparent 20%,#000 40%,#000 60%,transparent 80%) 0 0/250% 250%}
+@property --r{syntax:'<length>';inherits:false;initial-value:0px}
+#waves{position:absolute;inset:0;pointer-events:none}
+.wv{position:absolute;inset:0;opacity:0;--r:0px;background:url(../assets3/env-shine.webp) 0 0/100% 100% no-repeat;filter:drop-shadow(0 0 6px #fffdf6);will-change:opacity;
+ -webkit-mask-image:radial-gradient(circle at var(--x) var(--y),transparent calc(var(--r) - 26vh),#000 calc(var(--r) - 16vh),#000 calc(var(--r) - 2vh),transparent calc(var(--r) + 7vh));mask-image:radial-gradient(circle at var(--x) var(--y),transparent calc(var(--r) - 26vh),#000 calc(var(--r) - 16vh),#000 calc(var(--r) - 2vh),transparent calc(var(--r) + 7vh))}
 #flap3{position:absolute;inset:0;transform-origin:50% 0;will-change:transform,opacity;clip-path:polygon(0 0,100% 0,100% 21.5%,50% 53.2%,0 21.5%);filter:drop-shadow(0 6px 10px #6a5d5333)}
-#seal3{position:absolute;inset:0;transform-origin:50% 48.6%;will-change:transform,opacity;clip-path:ellipse(17.9% 10.9% at 50% 48.6%)}
+#seal3{transform-origin:50.2% 50.3%;will-change:transform,opacity;filter:drop-shadow(0 4px 6px #5a463322)}
 #fsh{position:absolute;inset:0;opacity:0;background:linear-gradient(#0000 10%,#4a3a2a30 55%)}
 .lay{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none}
 .glow{opacity:0;will-change:opacity;mix-blend-mode:screen}
@@ -109,13 +112,13 @@ body.rd #mute.on{display:flex}
 
 </style></head><body>
 <button id="mute" type="button" aria-label="Music">♪</button>
-
+<audio id="bgm" src="../assets3/../music.mp3" loop preload="auto"></audio>
 <div id="env" role="button" aria-label="Tap to open"><div class="stage" id="stg">
  <img class="lay" id="eOpen" src="../assets3/env-open.webp" alt="">
  <img class="lay" id="eClosed" src="../assets3/env-closed-ns.webp" alt="">
  <div id="flap3"><img class="lay" src="../assets3/env-closed-ns.webp" alt=""><div id="fsh"></div></div>
- <div id="seal3"><img class="lay" src="../assets3/env-closed.webp" alt=""></div>
- <img class="lay" id="eShine" src="../assets3/env-shine.webp" alt="">
+ <img class="lay" id="seal3" src="../assets3/seal-cut.webp" alt="">
+ <div id="waves"><div class="wv" style="--x:50%;--y:17%"></div><div class="wv" style="--x:50%;--y:80%"></div><div class="wv" style="--x:9%;--y:47%"></div><div class="wv" style="--x:91%;--y:47%"></div></div>
  <div id="spks"></div>
  <div id="rays"></div>
 </div><div class="forn" id="forn"></div><div class="hint">Tap to open</div><b id="tagn" hidden></b></div>
@@ -218,16 +221,24 @@ function open(user){if(opened)return;if(!ready){want=user;return}opened=true;env
  var cl=$('eClosed'),sh=$('eShine'),fl=$('flap3'),se=$('seal3'),rays=$('rays'),flash=$('flash'),hero=$('hero'),stg=$('stg');
  if(!env.animate){finish();return}
  // 1. seal press
- an(se,[{transform:'scale(1)'},{transform:'scale(.985)',offset:.35},{transform:'scale(1)'}],{duration:500,easing:'ease-out'});
- // 2. shimmer sweeps across the embossed florals + sparkles
- an(sh,[{opacity:0,maskPosition:'100% 100%',webkitMaskPosition:'100% 100%'},{opacity:1,offset:.12},{opacity:1,offset:.85},{opacity:0,maskPosition:'0% 0%',webkitMaskPosition:'0% 0%'}],{duration:2600,delay:250,easing:'ease-in-out'});
- SP.forEach(function(s){an(s,[{opacity:0,transform:'scale(.2) rotate(0deg)'},{opacity:1,transform:'scale(1) rotate(45deg)',offset:.4},{opacity:0,transform:'scale(.3) rotate(90deg)'}],{duration:700+Math.random()*500,delay:300+Math.random()*2400,easing:'ease-in-out'})});
+ an(se,[{transform:'scale(1)'},{transform:'scale(.97)',offset:.35},{transform:'scale(1)'}],{duration:500,easing:'ease-out',fill:'none'});
+ // 2. seal glows, then light blooms from the centre of each floral cluster and travels outward through the embroidery
+ an(se,[{filter:'drop-shadow(0 4px 6px #5a463322) brightness(1)'},{filter:'drop-shadow(0 0 16px #fffaf0) brightness(1.12)',offset:.45},{filter:'drop-shadow(0 4px 6px #5a463322) brightness(1)'}],{duration:1400,delay:150,easing:'ease-in-out',fill:'none'});
+ var reg=window.CSS&&CSS.registerProperty!==undefined||(window.CSS&&CSS.supports&&CSS.supports('background:paint(x)'));
+ [].forEach.call(document.querySelectorAll('.wv'),function(w,i){var side=i>1,d0=side?950:700,dur=side?2300:2700,R=side?'48vh':'72vh';
+  an(w,[{'--r':'0vh'},{'--r':R}],{duration:dur,delay:d0,easing:'cubic-bezier(.35,.1,.3,1)'});
+  an(w,[{opacity:0},{opacity:1,offset:.12},{opacity:1,offset:.78},{opacity:0}],{duration:dur,delay:d0,easing:'linear'})});
+ SP.forEach(function(s){an(s,[{opacity:0,transform:'scale(.2) rotate(0deg)'},{opacity:1,transform:'scale(1) rotate(45deg)',offset:.4},{opacity:0,transform:'scale(.3) rotate(90deg)'}],{duration:700+Math.random()*500,delay:900+Math.random()*2300,easing:'ease-in-out'})});
  // 3. flap + seal lift on the hinge; envelope reveals its glowing inside
- var T0=2900,E='cubic-bezier(.45,0,.25,1)';
- an(fl,[{transform:'scaleY(1)',opacity:1},{transform:'scaleY(.72)',opacity:.9,offset:.55},{transform:'scaleY(.42)',opacity:0}],{duration:1700,delay:T0,easing:E});
- an($('fsh'),[{opacity:0},{opacity:1}],{duration:1300,delay:T0,easing:'ease-in'});
- an(se,[{transform:'translateY(0) scale(1)',opacity:1},{transform:'translateY(-3%) scale(1)',opacity:1,offset:.35},{transform:'translateY(-27.6%) scale(.97)',opacity:1,offset:.92},{transform:'translateY(-27.6%) scale(.97)',opacity:0}],{duration:1900,delay:T0,easing:E});
- an(cl,[{opacity:1},{opacity:0,offset:.4},{opacity:0}],{duration:1700,delay:T0,easing:'ease-in-out'});
+ var T0=3600,E='cubic-bezier(.45,0,.25,1)';
+ var DUR=1900,FE='cubic-bezier(.5,0,.3,1)';
+ // flap folds up from its top hinge; the seal is locked to the flap tip (same easing, linear relation)
+ an(fl,[{transform:'scaleY(1)'},{transform:'scaleY(.364)'}],{duration:DUR,delay:T0,easing:FE});
+ an(fl,[{opacity:1},{opacity:1,offset:.75},{opacity:0}],{duration:DUR,delay:T0,easing:'linear'});
+ an($('fsh'),[{opacity:0},{opacity:1}],{duration:DUR,delay:T0,easing:FE});
+ an(se,[{transform:'translateY(0) scale(1)'},{transform:'translateY(-32%) scale(.96)'}],{duration:DUR,delay:T0,easing:FE,fill:'forwards'});
+ an(se,[{opacity:1},{opacity:0}],{duration:450,delay:T0+DUR+150,easing:'ease-in-out'});
+ an(cl,[{opacity:1},{opacity:0,offset:.45},{opacity:0}],{duration:DUR,delay:T0,easing:'linear'});
  an(stg,[{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.06)'}],{duration:3600,delay:T0,easing:'cubic-bezier(.3,0,.2,1)'});
  // 4. light rays bloom from the opening
  an(rays,[{opacity:0,transform:'translate(-50%,-50%) scale(.5) rotate(0deg)'},{opacity:.85,transform:'translate(-50%,-50%) scale(1) rotate(6deg)',offset:.55},{opacity:1,transform:'translate(-50%,-50%) scale(1.3) rotate(12deg)'}],{duration:2400,delay:T0+1300,easing:'cubic-bezier(.3,0,.2,1)'});
