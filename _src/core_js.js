@@ -54,5 +54,6 @@ var ac=null;function whoosh(){try{ac=ac||new (window.AudioContext||window.webkit
 /* music */
 var bgm=$('bgm'),mute=$('mute'),muted=false;
 if(bgm){mute.classList.add('on');mute.onclick=function(e){e.stopPropagation();muted=!muted;bgm.muted=muted;mute.textContent=muted?'×':'♪';if(!muted&&bgm.paused)bgm.play().catch(function(){})}}
-function startMusic(){if(bgm&&!muted&&bgm.paused){bgm.volume=.5;bgm.play().catch(function(){})}}
+var mStarted=false;function startMusic(){if(!bgm||muted||mStarted)return;mStarted=true;try{bgm.currentTime=0}catch(e){}bgm.volume=.55;var p=bgm.play();if(p&&p.catch)p.catch(function(){mStarted=false})}
+if(bgm){try{bgm.load()}catch(e){};var ap=bgm.play();if(ap&&ap.then)ap.then(function(){mStarted=true}).catch(function(){})}
 ['pointerdown','touchstart','keydown'].forEach(function(t){addEventListener(t,function(){startMusic()},{once:true,passive:true})});

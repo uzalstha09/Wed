@@ -190,6 +190,17 @@ form{width:100%;margin-top:18px;text-align:left}
 body.rd #mute.on{display:flex}
 @media (prefers-reduced-motion:reduce){.rv{transition:none!important;transform:none!important;opacity:1!important}}
 @@NECSS@@
+
+body.rd{overflow:hidden}
+.hero{height:100vh;height:100svh}
+.hero .txt{position:absolute;left:24%;right:24%;top:13%;z-index:3;text-align:center;transform-origin:50% 0}
+.k1{font-size:14px}.k2{font-size:27px}.k3{font-size:14px;margin:3px 0 0}.nm{font-size:44px;margin-top:4px}
+.info{position:absolute;left:11%;right:11%;top:47%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;transform-origin:50% 0;
+ background:radial-gradient(ellipse at 50% 45%,#fff9f2d9 0,#fff9f2b0 55%,#fff9f200 78%);padding:12px 4px 18px}
+.info .ec .cap{color:#9a7a5e}.info .evg.n2 .ec+.ec{border-left-color:#c9b3a2}
+.info .ec .lk{background:#fffaf5cc;border-color:#b79a7c}
+.info .cds{margin-top:12px}.info .cds div{border-left-color:#c9b3a2}
+.info .acts{margin-top:12px}
 """
 NECSS = "*{letter-spacing:0!important;text-transform:none!important}.nm{font-size:46px;line-height:1.3}.k2{font-size:26px}.names1{font-size:40px;line-height:1.35}.dear{line-height:1.4}"
 
@@ -200,7 +211,7 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
     evs = [dict(k=k, label=EV[k]['label'][lang], date=EV[k]['date'], bs=EV[k]['bs'][lang], time=EV[k]['time'][lang], venue=EV[k]['venue'][lang], map=EV[k]['map']) for k in P['ev']]
     url = SITE + ('/ne/' if lang == 'ne' else '/') + page + '/'
     title = P['title'][lang] + ' — ' + T['groom'] + (' र ' if lang == 'ne' else ' & ') + T['bride']
-    cfg = dict(lang=lang, ev=evs, T={k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear', 'yesw', 'now', 'gw', 'rsvpw', 'sending2', 'ok2', 'send2']}, wa=WA)
+    cfg = dict(lang=lang, ev=evs, T={'g0': T['groom'], 'b0': T['bride'], **{k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear', 'yesw', 'now', 'gw', 'rsvpw', 'sending2', 'ok2', 'send2']}}, wa=WA)
     rows = ''
     for e in evs:
         rows += ('<div class="f"><span class="l">' + esc(T['attend'].replace('{e}', e['label'])) + '</span><div class="pills">'
@@ -253,23 +264,16 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
 <div id="app">
  <section class="sec hero" id="hero">
   <img class="sky" src="{A}card.webp" alt="">
-  <div class="txt"><div class="dear0 rv" style="--d:0s" id="dear0"></div><div class="k1 rv" style="--d:.15s">{esc(k1)}</div><div class="k2 rv" style="--d:.35s">{esc(k2)}</div>{('<div class="k3 rv" style="--d:.55s">' + esc(k3) + '</div>') if k3 else ''}
-   <div class="nm rv" style="--d:.75s"><span>{esc(T['groom'])}</span><span class="a2"><span class="amp" style="display:inline">{esc(amp)}</span>{esc(T['bride'])}</span></div>
-   <div class="hd rv" style="--d:1s" id="hd"></div></div>
-  <div class="cue rv" style="--d:1.5s">{'तल हेर्नुहोस्' if lang == 'ne' else 'Scroll down'}</div>
+  <div class="txt" id="top"><div class="dear0 rv" style="--d:0s" id="dear0"></div><div class="k1 rv" style="--d:.15s">{esc(k1)}</div><div class="k2 rv" style="--d:.3s">{esc(k2)}</div>{('<div class="k3 rv" style="--d:.45s">' + esc(k3) + '</div>') if k3 else ''}
+   <div class="nm rv" style="--d:.6s"><span class="gN">{esc(T['groom'])}</span><span class="a2"><span class="amp" style="display:inline">{esc(amp)}</span><span class="bN">{esc(T['bride'])}</span></span></div></div>
+  <div class="info" id="win">
+   <div class="evg rv" style="--d:.85s" id="evs"></div>
+   <div class="cds rv" style="--d:1s" id="cd"></div>
+   <div class="acts rv" style="--d:1.15s"><button type="button" class="rbtn" id="ropen">{esc(T['rsvp'])}</button></div>
+   <a class="wa" id="wa" href="https://wa.me/{WA}" rel="noopener" hidden></a>
+   <div id="dearn" hidden></div>
+  </div>
  </section>
- <section class="sec det" id="det"><div class="win" id="win">
-   <div class="dear rv" style="--d:.1s" id="dearn"></div>
-   <div class="cap rv" style="--d:.2s">{esc(T['together'])}</div>
-   <div class="names1 rv" style="--d:.35s">{esc(T['groom'])} <i>{esc(amp)}</i> {esc(T['bride'])}</div>
-   <p class="inv rv" style="--d:.5s">{esc(P['invite'][lang])}</p>
-   <div class="rv" style="--d:.6s">{RULE}</div>
-   <div class="evg rv" style="--d:.7s" id="evs"></div>
-   <div class="cds rv" style="--d:.85s" id="cd"></div>
-   <div class="acts rv" style="--d:1s"><button type="button" class="rbtn" id="ropen">{esc(T['rsvp'])}</button>
-    <a class="wa" id="wa" href="https://wa.me/{WA}" rel="noopener">{esc(T['wa'])}</a></div>
-   <p class="bless rv" style="--d:1.15s">{esc(T['thankmsg'])}</p>
- </div></section>
 </div>
 <div id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-label="{esc(T['rsvp'])}"><button type="button" class="x" id="rclose" aria-label="Close">×</button>
  <div class="scr">{esc(T['rsvp'])}</div><p class="txt">{esc(T['rsvpsub'])}</p>{form}</div></div>
@@ -279,10 +283,15 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
     return html
 
 JS = open(os.path.join(SRC, 'core_js.js'), encoding='utf-8').read().replace("(function(){", "(function(){", 1) + r"""
+(function(){var gn=(q.get('gn')||'').trim().slice(0,30),bn=(q.get('bn')||'').trim().slice(0,30);
+ if(gn)[].forEach.call(document.querySelectorAll('.gN'),function(e){e.textContent=gn});if(bn)[].forEach.call(document.querySelectorAll('.bN'),function(e){e.textContent=bn});
+ if(gn||bn){var t1=document.title.split(' — ');document.title=t1[0]+' — '+(gn||C.T.g0)+(NE?' र ':' & ')+(bn||C.T.b0)}
+ var dov=function(){C.ev.forEach(function(e){var d=(q.get(e.k+'d')||'').trim(),bs=(q.get(e.k+'b')||'').trim().slice(0,40);if(/^\d{4}-\d{2}-\d{2}$/.test(d))e.date=d;if(bs)e.bs=bs})};dov();var _u=urlOv;urlOv=function(){_u();dov()};BASE=JSON.parse(JSON.stringify(C.ev));if(typeof tgt!=='undefined')tgt=D(C.ev[0])})();
 if(g){var fo=$('forn');if(fo)fo.textContent=(NE?g+' का लागि':'For '+g);var d0=$('dear0');if(d0)d0.textContent=T.dear+' '+g}
-function heroDates(){var h=$('hd');if(!h)return;h.innerHTML=C.ev.map(function(e){var d=D(e);return '<div>'+esc(e.label)+' · '+dv(d.getDate())+' '+T.months[d.getMonth()]+'<span>'+esc(e.bs)+(e.time?' · '+esc(e.time):'')+'</span></div>'}).join('')}heroDates();var _r=render;render=function(){_r();heroDates()};
+function heroDates(){var h=$('hd');if(!h)return;h.innerHTML=C.ev.map(function(e){var d=D(e);return '<div>'+esc(e.label)+' · '+dv(d.getDate())+' '+T.months[d.getMonth()]+'<span>'+esc(e.bs)+(e.time?' · '+esc(e.time):'')+'</span></div>'}).join('')}heroDates();var _r=render;render=function(){_r();heroDates()};render();tick();
 /* reveal on scroll */
 var secs=document.querySelectorAll('.sec');
+window.fitWin=function(){var w=$('win'),t=$('top');if(!w)return;var vw=Math.min(innerWidth,460),vh=innerHeight;w.style.transform='none';t.style.transform='none';var kt=Math.min(1,vh*.31/t.offsetHeight,vw*.52/t.offsetWidth);t.style.transform='scale('+kt.toFixed(3)+')';var top=vh*.13+t.offsetHeight*kt+vh*.02;w.style.top=top+'px';var k=Math.min(1,(vh*.95-top)/w.offsetHeight,vw*.78/w.offsetWidth);w.style.transform='scale('+k.toFixed(3)+')'};fitWin();addEventListener('resize',fitWin);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitWin);
 var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');if(e.target.id==='det'&&window.fitWin)fitWin();io.unobserve(e.target)}})},{threshold:.25}):null;
 /* sparkles over the florals */
 var spks=$('spks'),SP=[];var zones=[[.1,.3,.7,.08],[.9,.3,.7,.08],[.5,.68,.95,.6],[.5,.08,.4,.6]];
