@@ -15,7 +15,7 @@ function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
 function render(){
 var ev=$('evs');ev.className='evg rv'+(C.ev.length>1?' n2':'');
-ev.innerHTML=C.ev.map(function(e){var d=D(e);return '<div class="ec"><div class="cap">'+esc(e.label)+'</div><div class="d1">'+T.wd[d.getDay()]+'<br>'+fd(d)+'</div><div class="bs">'+esc(e.bs)+'</div>'+(e.time?'<div class="tm">'+esc(e.time)+'</div>':'')+(e.venue?'<div class="vn">'+esc(e.venue)+'</div>':'')+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="9" height="12" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
+ev.innerHTML=C.ev.map(function(e){var d=D(e);return '<div class="ec"><div class="cap">'+esc(e.label)+'</div><div class="d1">'+T.wd[d.getDay()]+'<br>'+fd(d)+'</div><div class="bs">'+esc(e.bs)+'</div>'+'<div class="tm">'+esc(e.time||'')+'</div>'+'<div class="vn">'+esc(e.venue||'')+'</div>'+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="9" height="12" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
 if(window.fitWin)fitWin();
 }
 applyCfg(null);render();
