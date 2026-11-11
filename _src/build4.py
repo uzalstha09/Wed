@@ -198,6 +198,9 @@ form{width:100%;margin-top:18px;text-align:left}
 .msg{margin-top:14px;text-align:center;font:italic 400 17px var(--bd);color:#e7e0ee;min-height:1.4em}
 #mute{position:fixed;top:14px;z-index:30;right:max(14px,calc(50% - 216px));width:38px;height:38px;border-radius:50%;border:1px solid #b9b0c6;background:#f6f4f9cc;color:var(--deep);font-size:15px;display:none;align-items:center;justify-content:center;cursor:pointer}
 body.rd #mute.on{display:flex}
+#tapm{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:31;display:none;align-items:center;gap:7px;padding:9px 16px;border-radius:22px;border:1px solid #d9c3a3;background:#fffaf2e6;color:#6b4c3a;font:500 12.5px var(--bd);letter-spacing:.06em;white-space:nowrap;cursor:pointer;box-shadow:0 0 0 0 #e8c98a99;animation:tpulse 2s ease-out infinite;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#tapm.on{display:flex}#tapm b{font-size:15px;font-weight:400}
+@keyframes tpulse{0%{box-shadow:0 0 0 0 #e8c98aaa}70%{box-shadow:0 0 0 12px #e8c98a00}100%{box-shadow:0 0 0 0 #e8c98a00}}
 @media (prefers-reduced-motion:reduce){.rv{transition:none!important;transform:none!important;opacity:1!important}}
 @@NECSS@@
 
@@ -293,6 +296,7 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="{FONTS[lang]}" rel="stylesheet">
 <style>{css}</style>{pf}</head><body>
 <button id="mute" type="button" aria-label="{esc(T['mute'])}">♪</button>
+<button id="tapm" type="button"><b>♪</b>{'संगीत सुन्न यहाँ थिच्नुहोस्' if lang == 'ne' else 'Tap for music'}</button>
 {'<audio id="bgm" src="' + A + '../music.mp3" loop preload="auto"></audio>' if HAS_MUSIC else ''}
 <div id="env" role="button" aria-label="{esc(T['hint'])}"><div class="stage" id="stg">
  <img class="lay" id="eOpen" src="{A}env-open.webp" alt="">

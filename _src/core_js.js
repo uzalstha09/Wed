@@ -54,6 +54,8 @@ var ac=null;function whoosh(){try{ac=ac||new (window.AudioContext||window.webkit
 /* music */
 var bgm=$('bgm'),mute=$('mute'),muted=false;
 if(bgm){mute.classList.add('on');mute.onclick=function(e){e.stopPropagation();muted=!muted;bgm.muted=muted;mute.textContent=muted?'×':'♪';if(!muted&&bgm.paused)bgm.play().catch(function(){})}}
-var mStarted=false;function startMusic(){if(!bgm||muted||mStarted)return;mStarted=true;try{bgm.currentTime=0}catch(e){}bgm.volume=.55;var p=bgm.play();if(p&&p.catch)p.catch(function(){mStarted=false})}
+var tapm=$('tapm');function tapOff(){if(tapm)tapm.classList.remove('on')}
+var mStarted=false;function startMusic(){if(!bgm||muted||mStarted)return;mStarted=true;try{bgm.currentTime=0}catch(e){}bgm.volume=.55;var p=bgm.play();if(p&&p.then)p.then(tapOff).catch(function(){mStarted=false});else tapOff()}
+if(tapm&&bgm){tapm.onclick=function(e){e.stopPropagation();muted=false;bgm.muted=false;if(mute)mute.textContent='♪';startMusic()};setTimeout(function(){if(!mStarted||bgm.paused)tapm.classList.add('on')},700);bgm.addEventListener('playing',tapOff)}
 if(bgm){try{bgm.load()}catch(e){};var ap=bgm.play();if(ap&&ap.then)ap.then(function(){mStarted=true}).catch(function(){})}
 ['pointerdown','touchstart','keydown'].forEach(function(t){addEventListener(t,function(){startMusic()},{once:true,passive:true})});
