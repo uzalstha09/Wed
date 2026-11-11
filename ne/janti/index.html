@@ -119,6 +119,7 @@ body.rd{overflow:hidden}
 .info .acts{margin-top:14px}
 #rmodal{display:none!important}
 /* alignment + legibility */
+.info .evg.n3 .ec+.ec{border-left:1px solid #d8bf9a}
 .hero .txt{position:absolute;z-index:3;text-align:center;transform-origin:50% 0;left:13%!important;right:13%!important;top:12.5%!important;display:flex;flex-direction:column;align-items:center;padding:10px 6px 14px;
  background:radial-gradient(ellipse 60% 55% at 50% 50%,#fffaf2e6 0,#fffaf2b8 55%,#fffaf200 100%)}
 .dear0{display:none;font:400 22px/1.2 var(--sc)!important;color:#7a3e1c!important;margin-bottom:6px!important}
@@ -142,6 +143,17 @@ body.rd{overflow:hidden}
 .cds{margin-top:14px!important}.cds b{font:500 26px/1 var(--bd)!important;color:#5a2d14!important}.cds span{font:600 9px var(--bd)!important;color:#8a5a2e!important}
 .cds div{border-left-color:#d8bf9a!important}
 .rbtn{background:linear-gradient(135deg,#c99a4a,#8a5a20)!important;color:#fff!important;font-size:12.5px!important;padding:13px 40px!important;box-shadow:0 6px 16px #8a5a2055!important}
+
+.evg.n3{grid-template-columns:1fr 1fr 1fr!important;gap:6px!important;align-items:stretch}
+.evg.n3 .ec{padding:0 2px}
+.evg.n3 .ec .cap{font-size:9.5px!important;letter-spacing:.14em!important}
+.evg.n3 .ec .d1{font-size:13.5px!important}
+.evg.n3 .ec .bs{font-size:12.5px!important}
+.evg.n3 .ec .tm{font-size:13px!important}
+.evg.n3 .ec .vn{font-size:12px!important;min-height:2.6em}
+.evg.n3 .ec .vn:empty{display:block}
+.evg.n3 .ec .lk{font-size:8.5px!important;letter-spacing:.06em!important;padding:6px 8px!important;gap:3px!important}
+.info:has(.n3){left:4%!important;right:4%!important}
 </style></head><body>
 <button id="mute" type="button" aria-label="संगीत">♪</button>
 <audio id="bgm" src="../../assets3/../music.mp3" loop preload="auto"></audio>
@@ -170,8 +182,11 @@ body.rd{overflow:hidden}
  </section>
 </div>
 <div id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-label="उपस्थिति"><button type="button" class="x" id="rclose" aria-label="Close">×</button>
- <div class="scr">उपस्थिति</div><p class="txt">कृपया आफ्नो उपस्थिति जानकारी गराउनुहोस्</p><form id="rf" novalidate><div class="f"><label class="l" for="rn">तपाईंको नाम</label><input type="text" id="rn" name="name" required maxlength="80" autocomplete="name"></div><div class="f"><span class="l">विवाहमा आउनुहुन्छ?</span><div class="pills"><label><input type="radio" name="attend-j" value="yes"><span>हो, आउँछु</span></label><label><input type="radio" name="attend-j" value="no"><span>माफ गर्नुहोस्, आउन सक्दिनँ</span></label></div></div><div class="f"><span class="l">रिसेप्सनमा आउनुहुन्छ?</span><div class="pills"><label><input type="radio" name="attend-r" value="yes"><span>हो, आउँछु</span></label><label><input type="radio" name="attend-r" value="no"><span>माफ गर्नुहोस्, आउन सक्दिनँ</span></label></div></div><div class="f"><label class="l" for="rg">जम्मा व्यक्ति</label><select id="rg" name="guests"><option value="1">१</option><option value="2">२</option><option value="3">३</option><option value="4">४</option><option value="5">५</option><option value="6">६</option><option value="7">७</option><option value="8">८</option><option value="9">९</option><option value="10">१०</option></select></div><button class="send" type="submit">WhatsApp मा पठाउनुहोस्</button><div class="msg" id="rmsg"></div></form></div></div>
-<script>var C={"lang": "ne", "ev": [{"k": "j", "label": "विवाह", "date": "2026-11-25", "bs": "मंसिर ९, २०८३", "time": "", "venue": "", "map": "https://maps.app.goo.gl/B4FtiDtbxvyte3Ln6"}, {"k": "r", "label": "रिसेप्सन", "date": "2026-11-28", "bs": "मंसिर १२, २०८३", "time": "साँझ ५:०० बजेदेखि", "venue": "", "map": "https://www.google.com/maps/place/MFG6%2BV5X+Diyalo+Foodland+Kalikanagar,+Butwal,+Lumbini+Province+32907/@27.6771345,83.4606209,16z/data=!4m6!3m5!1s0x399687000e38b619:0xd6fbbf73869bbccb!8m2!3d27.6771345!4d83.4606209!16s%2Fg%2F11vqbf059t"}], "T": {"g0": "उज्ज्वल", "b0": "ब्लेसी", "months": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "wd": ["आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहीबार", "शुक्रबार", "शनिबार"], "units": ["दिन", "घण्टा", "मिनेट", "सेकेन्ड"], "viewloc": "स्थान हेर्नुहोस्", "sending": "WhatsApp खोल्दै…", "ok": "धन्यवाद! पूरा गर्न WhatsApp मा Send थिच्नुहोस्।", "err": "माफ गर्नुहोस्, पठाउन सकिएन। फेरि प्रयास गर्नुहोस् वा WhatsApp मा सन्देश पठाउनुहोस्।", "wamsg": "नमस्ते उज्ज्वल र ब्लेसी, म {n}।", "need": "कृपया हरेक कार्यक्रमका लागि छान्नुहोस्।", "dear": "आदरणीय", "yesw": "आउँछु", "now": "आउन सक्दिनँ", "gw": "जम्मा व्यक्ति", "rsvpw": "उपस्थिति", "sending2": "पठाउँदै…", "ok2": "धन्यवाद! तपाईंको जानकारी प्राप्त भयो।", "send2": "पठाउनुहोस्"}, "wa": "9779813013735"};</script>
+ <div class="scr">उपस्थिति</div><p class="txt">कृपया आफ्नो उपस्थिति जानकारी गराउनुहोस्</p><form id="rf" novalidate><div class="f"><label class="l" for="rn">तपाईंको नाम</label><input type="text" id="rn" name="name" required maxlength="80" autocomplete="name"></div><div class="f"><span class="l">मेहेन्दीमा आउनुहुन्छ?</span><div class="pills"><label><input type="radio" name="attend-m" value="yes"><span>हो, आउँछु</span></label><label><input type="radio" name="attend-m" value="no"><span>माफ गर्नुहोस्, आउन सक्दिनँ</span></label></div></div><div class="f"><span class="l">विवाहमा आउनुहुन्छ?</span><div class="pills"><label><input type="radio" name="attend-j" value="yes"><span>हो, आउँछु</span></label><label><input type="radio" name="attend-j" value="no"><span>माफ गर्नुहोस्, आउन सक्दिनँ</span></label></div></div><div class="f"><span class="l">रिसेप्सनमा आउनुहुन्छ?</span><div class="pills"><label><input type="radio" name="attend-r" value="yes"><span>हो, आउँछु</span></label><label><input type="radio" name="attend-r" value="no"><span>माफ गर्नुहोस्, आउन सक्दिनँ</span></label></div></div><div class="f"><label class="l" for="rg">जम्मा व्यक्ति</label><select id="rg" name="guests"><option value="1">१</option><option value="2">२</option><option value="3">३</option><option value="4">४</option><option value="5">५</option><option value="6">६</option><option value="7">७</option><option value="8">८</option><option value="9">९</option><option value="10">१०</option></select></div><button class="send" type="submit">WhatsApp मा पठाउनुहोस्</button><div class="msg" id="rmsg"></div></form></div></div>
+<script>var C={"lang": "ne", "ev": [{"k": "m", "label": "मेहेन्दी", "date": "2026-11-24", "bs": "मंसिर ८, २०८३", "time": "", "venue": "", "map": ""}, {"k": "j", "label": "विवाह", "date": "2026-11-25", "bs": "मंसिर ९, २०८३", "time": "", "venue": "", "map": "https://maps.app.goo.gl/B4FtiDtbxvyte3Ln6"}, {"k": "r", "label": "रिसेप्सन", "date": "2026-11-28", "bs": "मंसिर १२, २०८३", "time": "साँझ ५:०० बजेदेखि", "venue": "", "map": "https://www.google.com/maps/place/MFG6%2BV5X+Diyalo+Foodland+Kalikanagar,+Butwal,+Lumbini+Province+32907/@27.6771345,83.4606209,16z/data=!4m6!3m5!1s0x399687000e38b619:0xd6fbbf73869bbccb!8m2!3d27.6771345!4d83.4606209!16s%2Fg%2F11vqbf059t"}], "dflt": ["j", "r"], "T": {"g0": "उज्ज्वल", "b0": "ब्लेसी", "months": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "wd": ["आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहीबार", "शुक्रबार", "शनिबार"], "units": ["दिन", "घण्टा", "मिनेट", "सेकेन्ड"], "viewloc": "स्थान हेर्नुहोस्", "sending": "WhatsApp खोल्दै…", "ok": "धन्यवाद! पूरा गर्न WhatsApp मा Send थिच्नुहोस्।", "err": "माफ गर्नुहोस्, पठाउन सकिएन। फेरि प्रयास गर्नुहोस् वा WhatsApp मा सन्देश पठाउनुहोस्।", "wamsg": "नमस्ते उज्ज्वल र ब्लेसी, म {n}।", "need": "कृपया हरेक कार्यक्रमका लागि छान्नुहोस्।", "dear": "आदरणीय", "yesw": "आउँछु", "now": "आउन सक्दिनँ", "gw": "जम्मा व्यक्ति", "rsvpw": "उपस्थिति", "sending2": "पठाउँदै…", "ok2": "धन्यवाद! तपाईंको जानकारी प्राप्त भयो।", "send2": "पठाउनुहोस्"}, "wa": "9779813013735"};</script>
+<script>(function(){var q=new URLSearchParams(location.search),e=(q.get('e')||'').split(/[^a-z]+/).filter(function(x){return /^[mjr]$/.test(x)});if(!e.length)e=C.dflt;C.ev=C.ev.filter(function(v){return e.indexOf(v.k)>-1});C.sel=C.ev.map(function(v){return v.k}).join('');
+var NE=C.lang==='ne',H={m:NE?'मेहेन्दी समारोह':'Mehendi Ceremony',j:NE?'शुभविवाह':'Wedding Ceremony',r:NE?'विवाह रिसेप्सन':'Wedding Reception'};C.head=C.ev.length==1?H[C.ev[0].k]:(NE?'विवाह उत्सव':'Wedding Celebration');
+document.addEventListener('DOMContentLoaded',function(){var k=document.querySelector('.k2');if(k)k.textContent=C.head;var t=document.title.split(' — ');document.title=(C.ev.length==1?C.ev[0].label:(NE?'विवाह उत्सव':'Wedding Celebration'))+' — '+t[1]})})();</script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)},T=C.T,NE=C.lang==='ne';
@@ -181,14 +196,14 @@ function cm(u){try{var x=new URL(u);if(/(^|\.)goo\.gl$/.test(x.hostname))x.searc
 var q=new URLSearchParams(location.search);
 var g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
 if(g){document.body.classList.add('named');$('tagn').textContent=g;$('dearn').textContent=T.dear+' '+g;$('rn').value=g}
-var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={j:'wedding',r:'reception'};
+var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={m:'mehendi',j:'wedding',r:'reception'};
 var BASE=JSON.parse(JSON.stringify(C.ev));
 function urlOv(){C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89/.test(m))e.map=m.slice(0,600)});}
 var RS='';function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg&&typeof cfg.rsvp_url==='string'&&/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.rsvp_url))RS=cfg.rsvp_url;if(cfg)C.ev.forEach(function(e){var c=cfg[KEY[e.k]];if(!c)return;var L=NE?'ne':'en';if(typeof c.map==='string'&&/^https?:\/\//i.test(c.map))e.map=c.map;if(typeof c['time_'+L]==='string')e.time=c['time_'+L];if(typeof c['venue_'+L]==='string')e.venue=c['venue_'+L]});urlOv()}
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
 function render(){
-var ev=$('evs');ev.className='evg rv'+(C.ev.length>1?' n2':'');
+var ev=$('evs');ev.className='evg rv'+(C.ev.length>2?' n3':C.ev.length>1?' n2':'');
 ev.innerHTML=C.ev.map(function(e){var d=D(e);return '<div class="ec"><div class="cap">'+esc(e.label)+'</div><div class="d1">'+T.wd[d.getDay()]+'<br>'+fd(d)+'</div><div class="bs">'+esc(e.bs)+'</div>'+'<div class="tm">'+esc(e.time||'')+'</div>'+'<div class="vn">'+esc(e.venue||'')+'</div>'+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="9" height="12" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
 if(window.fitWin)fitWin();
 }

@@ -23,12 +23,16 @@ a.btn.alt,.btn.alt{background:#efe4d9;color:var(--ink)}
 .r b{display:block}
 .r small{display:block;word-break:break-all;color:var(--soft);margin:3px 0 4px;font-size:12px}
 .ev[hidden]{display:none}
+.chk label{flex:1;min-width:110px;display:flex;align-items:center;gap:8px;margin:0;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fffdfb;color:var(--ink);font-size:15px;cursor:pointer}
+.chk input{width:18px;height:18px;margin:0;accent-color:var(--acc)}
+.chk label:has(input:checked){background:#f3e7dc;border-color:var(--acc)}
 </style></head><body><main>
 <h1>Invitation builder</h1>
 <p class="sub">Choose the invitation, change any details, then copy or share the links. Empty fields keep what is already on the card.</p>
 
 <div class="card"><h2>Invitation</h2>
- <div class="seg" id="type"><button data-v="reception" class="on">Reception only</button><button data-v="wedding">Wedding only</button><button data-v="janti">Wedding + Reception</button></div>
+ <p class="hint">Tick one or more events to show on the card.</p>
+ <div class="seg chk" id="evsel"><label><input type="checkbox" value="m"> Mehendi</label><label><input type="checkbox" value="j" checked> Wedding</label><label><input type="checkbox" value="r" checked> Reception</label></div>
  <label>Language</label>
  <div class="seg" id="lang"><button data-v="" class="on">English</button><button data-v="ne/">नेपाली</button></div>
 </div>
@@ -36,6 +40,12 @@ a.btn.alt,.btn.alt{background:#efe4d9;color:var(--ink)}
 <div class="card"><h2>Couple</h2>
  <p class="hint">Leave empty to keep Ujjwal &amp; Blesy (उज्ज्वल र ब्लेसी on Nepali cards).</p>
  <div class="row"><div><label>Groom name</label><input id="gn" placeholder="Ujjwal"></div><div><label>Bride name</label><input id="bn" placeholder="Blesy"></div></div>
+</div>
+
+<div class="card ev" id="evm"><h2>Mehendi</h2>
+ <div class="row"><div><label>Date</label><input id="md" type="date"></div><div><label>Nepali date (BS)</label><input id="mb" placeholder="Mangsir 8, 2083"></div></div>
+ <div class="row"><div><label>Time</label><input id="mt" placeholder="4:00 PM"></div><div><label>Venue</label><input id="mv" placeholder="Venue"></div></div>
+ <label>Google Maps link</label><input id="mm" placeholder="https://maps.app.goo.gl/…">
 </div>
 
 <div class="card ev" id="evj"><h2>Wedding</h2>
@@ -58,12 +68,13 @@ a.btn.alt,.btn.alt{background:#efe4d9;color:var(--ink)}
 </div>
 </main>
 <script>
-var $=function(i){return document.getElementById(i)},type='reception',lang='';
+var $=function(i){return document.getElementById(i)},lang='';
 function seg(id,cb){[].forEach.call($(id).querySelectorAll('button'),function(b){b.onclick=function(){[].forEach.call($(id).querySelectorAll('button'),function(x){x.classList.remove('on')});b.classList.add('on');cb(b.dataset.v);upd()}})}
-seg('type',function(v){type=v});seg('lang',function(v){lang=v});
+seg('lang',function(v){lang=v});
 var base=location.href.split(/[?#]/)[0].replace(/link\/(index\.html)?$/,'');
-function fields(){var f=['gn','bn'];if(type!=='reception')f=f.concat(['jd','jb','jt','jv','jm']);if(type!=='wedding')f=f.concat(['rd','rb','rt','rv','rm']);return f}
-function url(name){var q=new URLSearchParams();fields().forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return base+lang+type+'/'+(s?'?'+s:'')}
+function sel(){return [].filter.call(document.querySelectorAll('#evsel input'),function(c){return c.checked}).map(function(c){return c.value})}
+function fields(){var f=['gn','bn'];sel().forEach(function(k){f=f.concat(['d','b','t','v','m'].map(function(s){return k+s}))});return f}
+function url(name){var q=new URLSearchParams();q.set('e',sel().join(','));fields().forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return base+lang+'invite/'+(s?'?'+s.replace(/%2C/g,','):'')}
 function msg(u){var g=$('gn').value.trim(),b=$('bn').value.trim();if(lang)return (g||'उज्ज्वल')+' र '+(b||'ब्लेसी')+'को विवाहमा तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u;return 'You are warmly invited to the wedding of '+(g||'Ujjwal')+' & '+(b||'Blesy')+'. Open your invitation: '+u}
 function row(title,u){var d=document.createElement('div');d.className='r';var t=document.createElement('b');t.textContent=title;var s=document.createElement('small');s.textContent=u;d.append(t,s);
  var c=document.createElement('button');c.className='btn';c.textContent='Copy';c.onclick=function(){navigator.clipboard.writeText(u).then(function(){c.textContent='Copied ✓'})};
@@ -72,8 +83,9 @@ function row(title,u){var d=document.createElement('div');d.className='r';var t=
  var m=document.createElement('a');m.className='btn alt';m.textContent='Messenger';m.target='_blank';m.href='fb-messenger://share/?link='+encodeURIComponent(u);
  var pv=document.createElement('a');pv.className='btn alt';pv.textContent='Preview';pv.target='_blank';pv.href=u;
  d.append(c,w,v,m,pv);return d}
-function upd(){$('evj').hidden=type==='reception';$('evr').hidden=type==='wedding';var p=$('p');p.innerHTML='';p.appendChild(row('Anyone',url()));$('o').innerHTML=''}
-['gn','bn','jd','jb','jt','jv','jm','rd','rb','rt','rv','rm'].forEach(function(i){$(i).addEventListener('input',upd)});
+function upd(){var s=sel();if(!s.length){this&&this.checked===false&&(this.checked=true);s=sel()}['m','j','r'].forEach(function(k){$('ev'+k).hidden=s.indexOf(k)<0});var p=$('p');p.innerHTML='';p.appendChild(row('Anyone',url()));$('o').innerHTML=''}
+[].forEach.call(document.querySelectorAll('#evsel input'),function(c){c.addEventListener('change',upd)});
+['gn','bn','md','mb','mt','mv','mm','jd','jb','jt','jv','jm','rd','rb','rt','rv','rm'].forEach(function(i){$(i).addEventListener('input',upd)});
 $('go').onclick=function(){var o=$('o');o.innerHTML='';$('t').value.split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){o.appendChild(row(n,url(n)))})};
 upd();
 </script></body></html>
