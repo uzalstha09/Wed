@@ -108,6 +108,9 @@ form{width:100%;margin-top:18px;text-align:left}
 .msg{margin-top:14px;text-align:center;font:italic 400 17px var(--bd);color:#e7e0ee;min-height:1.4em}
 #mute{position:fixed;top:14px;z-index:30;right:max(14px,calc(50% - 216px));width:38px;height:38px;border-radius:50%;border:1px solid #b9b0c6;background:#f6f4f9cc;color:var(--deep);font-size:15px;display:none;align-items:center;justify-content:center;cursor:pointer}
 body.rd #mute.on{display:flex}
+#tapm{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:31;display:none;align-items:center;gap:7px;padding:9px 16px;border-radius:22px;border:1px solid #d9c3a3;background:#fffaf2e6;color:#6b4c3a;font:500 12.5px var(--bd);letter-spacing:.06em;white-space:nowrap;cursor:pointer;box-shadow:0 0 0 0 #e8c98a99;animation:tpulse 2s ease-out infinite;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#tapm.on{display:flex}#tapm b{font-size:15px;font-weight:400}
+@keyframes tpulse{0%{box-shadow:0 0 0 0 #e8c98aaa}70%{box-shadow:0 0 0 12px #e8c98a00}100%{box-shadow:0 0 0 0 #e8c98a00}}
 @media (prefers-reduced-motion:reduce){.rv{transition:none!important;transform:none!important;opacity:1!important}}
 
 
@@ -156,6 +159,7 @@ body.rd{overflow:hidden}
 .info:has(.n3){left:4%!important;right:4%!important}
 </style></head><body>
 <button id="mute" type="button" aria-label="Music">♪</button>
+<button id="tapm" type="button"><b>♪</b>Tap for music</button>
 <audio id="bgm" src="../assets3/../music.mp3" loop preload="auto"></audio>
 <div id="env" role="button" aria-label="Tap to open"><div class="stage" id="stg">
  <img class="lay" id="eOpen" src="../assets3/env-open.webp" alt="">
@@ -243,7 +247,9 @@ var ac=null;function whoosh(){try{ac=ac||new (window.AudioContext||window.webkit
 /* music */
 var bgm=$('bgm'),mute=$('mute'),muted=false;
 if(bgm){mute.classList.add('on');mute.onclick=function(e){e.stopPropagation();muted=!muted;bgm.muted=muted;mute.textContent=muted?'×':'♪';if(!muted&&bgm.paused)bgm.play().catch(function(){})}}
-var mStarted=false;function startMusic(){if(!bgm||muted||mStarted)return;mStarted=true;try{bgm.currentTime=0}catch(e){}bgm.volume=.55;var p=bgm.play();if(p&&p.catch)p.catch(function(){mStarted=false})}
+var tapm=$('tapm');function tapOff(){if(tapm)tapm.classList.remove('on')}
+var mStarted=false;function startMusic(){if(!bgm||muted||mStarted)return;mStarted=true;try{bgm.currentTime=0}catch(e){}bgm.volume=.55;var p=bgm.play();if(p&&p.then)p.then(tapOff).catch(function(){mStarted=false});else tapOff()}
+if(tapm&&bgm){tapm.onclick=function(e){e.stopPropagation();muted=false;bgm.muted=false;if(mute)mute.textContent='♪';startMusic()};setTimeout(function(){if(!mStarted||bgm.paused)tapm.classList.add('on')},700);bgm.addEventListener('playing',tapOff)}
 if(bgm){try{bgm.load()}catch(e){};var ap=bgm.play();if(ap&&ap.then)ap.then(function(){mStarted=true}).catch(function(){})}
 ['pointerdown','touchstart','keydown'].forEach(function(t){addEventListener(t,function(){startMusic()},{once:true,passive:true})});
 
