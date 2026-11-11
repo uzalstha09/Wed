@@ -364,17 +364,22 @@ function open(user){if(opened)return;if(!ready){want=user;return}opened=true;env
  an(fl,[{transform:'scaleY(1)'},{transform:'scaleY(.364)'}],{duration:DUR,delay:T0,easing:FE});
  an(fl,[{opacity:1},{opacity:1,offset:.75},{opacity:0}],{duration:DUR,delay:T0,easing:'linear'});
  an($('fsh'),[{opacity:0},{opacity:1}],{duration:DUR,delay:T0,easing:FE});
- an(se,[{transform:'translateY(0) scale(1)'},{transform:'translateY(-32%) scale(.96)'}],{duration:DUR,delay:T0,easing:FE,fill:'forwards'});
- an(se,[{opacity:1},{opacity:0}],{duration:450,delay:T0+DUR+150,easing:'ease-in-out'});
+ // seal lands exactly on the seal printed in the open-envelope image (measured), then dissolves into it
+ an(se,[{transform:'translate(0,0) scale(1)'},{transform:'translate(.48%,-32.19%) scale(.87)'}],{duration:DUR,delay:T0,easing:FE,fill:'forwards'});
+ an(se,[{opacity:1},{opacity:0}],{duration:1100,delay:T0+DUR-200,easing:'ease-in-out'});
  an(cl,[{opacity:1},{opacity:0,offset:.45},{opacity:0}],{duration:DUR,delay:T0,easing:'linear'});
  an(stg,[{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.06)'}],{duration:3600,delay:T0,easing:'cubic-bezier(.3,0,.2,1)'});
  // 4. light rays bloom from the opening
  an(rays,[{opacity:0,transform:'translate(-50%,-50%) scale(.5) rotate(0deg)'},{opacity:.85,transform:'translate(-50%,-50%) scale(1) rotate(6deg)',offset:.55},{opacity:1,transform:'translate(-50%,-50%) scale(1.3) rotate(12deg)'}],{duration:2400,delay:T0+1300,easing:'cubic-bezier(.3,0,.2,1)'});
- // 5. white flash -> card
- an(flash,[{opacity:0},{opacity:1}],{duration:650,delay:T0+3100,easing:'ease-in'});
- setTimeout(function(){env.style.display='none';hero.classList.add('in');document.body.classList.add('rd');
-   an(hero,[{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:2600,easing:'cubic-bezier(.2,.7,.2,1)'});
-   an(flash,[{opacity:1},{opacity:0}],{duration:1200,easing:'ease-out'});setTimeout(finish,1300)},T0+3800)}
+ // 5. envelope dissolves into the card through a soft glow (no hard cut)
+ var X=T0+3000,win=$('win');
+ setTimeout(function(){hero.classList.add('in')},X+400);
+ setTimeout(function(){if(window.fitWin)fitWin();
+   an(hero,[{transform:'scale(1.08)',filter:'brightness(1.25)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:2600,easing:'cubic-bezier(.2,.7,.2,1)'});
+   an(win,[{opacity:0},{opacity:1}],{duration:1200,delay:900,easing:'ease-out',fill:'backwards'})},X-300);
+ an(flash,[{opacity:0},{opacity:.8,offset:.45},{opacity:0}],{duration:1800,delay:X-500,easing:'ease-in-out'});
+ an(env,[{opacity:1},{opacity:1,offset:.25},{opacity:0}],{duration:1600,delay:X-300,easing:'ease-in-out'});
+ setTimeout(finish,X+1400)}
 function finish(){document.body.classList.add('rd');env.style.display='none';secs[0].classList.add('in');if(io)for(var i=1;i<secs.length;i++)io.observe(secs[i]);else secs.forEach(function(s){s.classList.add('in')});if(window.fitWin)fitWin()}
 env.addEventListener('click',function(){open(true)});
 Promise.all([].slice.call(document.querySelectorAll('#env img,#hero img')).map(function(i){return i.decode?i.decode().catch(function(){}):Promise.resolve()})).then(function(){ready=true;if(want!==null)open(want)});
