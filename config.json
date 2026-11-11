@@ -1,6 +1,13 @@
 {
+  "mehendi": {
+    "map": "https://maps.app.goo.gl/THLxajKnBT9Wqsf86",
+    "time_en": "",
+    "time_ne": "",
+    "venue_en": "Jaycees Chowk",
+    "venue_ne": "जेसिज चोक"
+  },
   "wedding": {
-    "map": "https://maps.app.goo.gl/SwDc6eLc1i2UiDbU8",
+    "map": "https://maps.app.goo.gl/rDuVTfyRNMGSNUw48",
     "time_en": "10:00 AM",
     "time_ne": "बिहान १०:०० बजे",
     "venue_en": "Dreamland Gold Resort",
