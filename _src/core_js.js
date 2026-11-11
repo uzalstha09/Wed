@@ -7,14 +7,14 @@ function cm(u){try{var x=new URL(u);if(/(^|\.)goo\.gl$/.test(x.hostname))x.searc
 var q=new URLSearchParams(location.search);
 var g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40);
 if(g){document.body.classList.add('named');$('tagn').textContent=g;$('dearn').textContent=T.dear+' '+g;$('rn').value=g}
-var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={j:'wedding',r:'reception'};
+var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={m:'mehendi',j:'wedding',r:'reception'};
 var BASE=JSON.parse(JSON.stringify(C.ev));
 function urlOv(){C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89/.test(m))e.map=m.slice(0,600)});}
 var RS='';function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg&&typeof cfg.rsvp_url==='string'&&/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.rsvp_url))RS=cfg.rsvp_url;if(cfg)C.ev.forEach(function(e){var c=cfg[KEY[e.k]];if(!c)return;var L=NE?'ne':'en';if(typeof c.map==='string'&&/^https?:\/\//i.test(c.map))e.map=c.map;if(typeof c['time_'+L]==='string')e.time=c['time_'+L];if(typeof c['venue_'+L]==='string')e.venue=c['venue_'+L]});urlOv()}
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
 function render(){
-var ev=$('evs');ev.className='evg rv'+(C.ev.length>1?' n2':'');
+var ev=$('evs');ev.className='evg rv'+(C.ev.length>2?' n3':C.ev.length>1?' n2':'');
 ev.innerHTML=C.ev.map(function(e){var d=D(e);return '<div class="ec"><div class="cap">'+esc(e.label)+'</div><div class="d1">'+T.wd[d.getDay()]+'<br>'+fd(d)+'</div><div class="bs">'+esc(e.bs)+'</div>'+'<div class="tm">'+esc(e.time||'')+'</div>'+'<div class="vn">'+esc(e.venue||'')+'</div>'+(e.map?'<a class="lk" href="'+esc(cm(e.map))+'" rel="noopener"><svg width="9" height="12" viewBox="0 0 12 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14z"/><circle cx="6" cy="6" r="1.8"/></svg>'+esc(T.viewloc)+'</a>':'')+'</div>'}).join('');
 if(window.fitWin)fitWin();
 }

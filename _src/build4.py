@@ -13,6 +13,9 @@ PHOTO = base64.b64encode(open(os.path.join(SRC, 'couple_arch.jpg'), 'rb').read()
 HAS_MUSIC = os.path.exists(os.path.join(ROOT, 'music.mp3'))
 
 EV = {
+  'm': dict(date='2026-11-24', bs={'en': 'Mangsir 8, 2083', 'ne': 'मंसिर ८, २०८३'},
+            label={'en': 'Mehendi', 'ne': 'मेहेन्दी'}, time={'en': '', 'ne': ''},
+            venue={'en': '', 'ne': ''}, map=''),
   'j': dict(date='2026-11-25', bs={'en': 'Mangsir 9, 2083', 'ne': 'मंसिर ९, २०८३'},
             label={'en': 'Wedding', 'ne': 'विवाह'}, time={'en': '', 'ne': ''},
             venue={'en': '', 'ne': ''},
@@ -24,6 +27,11 @@ EV = {
 }
 
 PAGES = {
+  'invite': dict(ev=['j', 'r'], form='rsvp-invite',
+     title={'en': 'Wedding Invitation', 'ne': 'विवाह निमन्त्रणा'},
+     invite={'en': 'invite you to celebrate with them', 'ne': 'तपाईंलाई हार्दिक निमन्त्रणा गर्दछन्'},
+     desc={'en': 'You are warmly invited to the wedding celebrations of Ujjwal & Blesy. Tap to open your invitation.',
+           'ne': 'उज्ज्वल र ब्लेसीको विवाह समारोहमा हार्दिक निमन्त्रणा। निमन्त्रणा खोल्न ट्याप गर्नुहोस्।'}),
   'reception': dict(ev=['r'], form='rsvp-reception',
      title={'en': 'Wedding Reception', 'ne': 'विवाह रिसेप्सन'},
      invite={'en': 'request the pleasure of your company at their wedding reception',
@@ -76,6 +84,7 @@ FONTS = {
  'ne': "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Pinyon+Script&family=Noto+Serif+Devanagari:wght@400;500;600&family=Tiro+Devanagari+Hindi&display=swap",
 }
 HERO = {
+ 'invite': {'en': ('Welcome to the', 'Wedding Celebration', 'of'), 'ne': ('हार्दिक स्वागत', 'विवाह उत्सव', '')},
  'reception': {'en': ('Welcome to the', 'Wedding Reception', 'of'), 'ne': ('हार्दिक स्वागत', 'विवाह रिसेप्सन', '')},
  'wedding': {'en': ('Welcome to the', 'Wedding Ceremony', 'of'), 'ne': ('हार्दिक स्वागत', 'शुभविवाह', '')},
  'janti': {'en': ('Welcome to the', 'Wedding Celebration', 'of'), 'ne': ('हार्दिक स्वागत', 'विवाह तथा रिसेप्सन', '')},
@@ -199,6 +208,7 @@ body.rd{overflow:hidden}
 .info .acts{margin-top:14px}
 #rmodal{display:none!important}
 /* alignment + legibility */
+.info .evg.n3 .ec+.ec{border-left:1px solid #d8bf9a}
 .hero .txt{position:absolute;z-index:3;text-align:center;transform-origin:50% 0;left:13%!important;right:13%!important;top:12.5%!important;display:flex;flex-direction:column;align-items:center;padding:10px 6px 14px;
  background:radial-gradient(ellipse 60% 55% at 50% 50%,#fffaf2e6 0,#fffaf2b8 55%,#fffaf200 100%)}
 .dear0{display:none;font:400 22px/1.2 var(--sc)!important;color:#7a3e1c!important;margin-bottom:6px!important}
@@ -222,6 +232,17 @@ body.rd{overflow:hidden}
 .cds{margin-top:14px!important}.cds b{font:500 26px/1 var(--bd)!important;color:#5a2d14!important}.cds span{font:600 9px var(--bd)!important;color:#8a5a2e!important}
 .cds div{border-left-color:#d8bf9a!important}
 .rbtn{background:linear-gradient(135deg,#c99a4a,#8a5a20)!important;color:#fff!important;font-size:12.5px!important;padding:13px 40px!important;box-shadow:0 6px 16px #8a5a2055!important}
+
+.evg.n3{grid-template-columns:1fr 1fr 1fr!important;gap:6px!important;align-items:stretch}
+.evg.n3 .ec{padding:0 2px}
+.evg.n3 .ec .cap{font-size:9.5px!important;letter-spacing:.14em!important}
+.evg.n3 .ec .d1{font-size:13.5px!important}
+.evg.n3 .ec .bs{font-size:12.5px!important}
+.evg.n3 .ec .tm{font-size:13px!important}
+.evg.n3 .ec .vn{font-size:12px!important;min-height:2.6em}
+.evg.n3 .ec .vn:empty{display:block}
+.evg.n3 .ec .lk{font-size:8.5px!important;letter-spacing:.06em!important;padding:6px 8px!important;gap:3px!important}
+.info:has(.n3){left:4%!important;right:4%!important}
 """
 NECSS = "*{letter-spacing:0!important;text-transform:none!important}.nm{font-size:46px;line-height:1.3}.k2{font-size:26px}.names1{font-size:40px;line-height:1.35}.dear{line-height:1.4}"
 
@@ -229,10 +250,10 @@ RULE = '<svg class="rule" viewBox="0 0 120 14"><g fill="none" stroke="currentCol
 
 def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
     P, T = PAGES[page], S[lang]
-    evs = [dict(k=k, label=EV[k]['label'][lang], date=EV[k]['date'], bs=EV[k]['bs'][lang], time=EV[k]['time'][lang], venue=EV[k]['venue'][lang], map=EV[k]['map']) for k in P['ev']]
+    evs = [dict(k=k, label=EV[k]['label'][lang], date=EV[k]['date'], bs=EV[k]['bs'][lang], time=EV[k]['time'][lang], venue=EV[k]['venue'][lang], map=EV[k]['map']) for k in ['m', 'j', 'r']]
     url = SITE + ('/ne/' if lang == 'ne' else '/') + page + '/'
     title = P['title'][lang] + ' — ' + T['groom'] + (' र ' if lang == 'ne' else ' & ') + T['bride']
-    cfg = dict(lang=lang, ev=evs, T={'g0': T['groom'], 'b0': T['bride'], **{k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear', 'yesw', 'now', 'gw', 'rsvpw', 'sending2', 'ok2', 'send2']}}, wa=WA)
+    cfg = dict(lang=lang, ev=evs, dflt=P['ev'], T={'g0': T['groom'], 'b0': T['bride'], **{k: T[k] for k in ['months', 'wd', 'units', 'viewloc', 'sending', 'ok', 'err', 'wamsg', 'need', 'dear', 'yesw', 'now', 'gw', 'rsvpw', 'sending2', 'ok2', 'send2']}}, wa=WA)
     rows = ''
     for e in evs:
         rows += ('<div class="f"><span class="l">' + esc(T['attend'].replace('{e}', e['label'])) + '</span><div class="pills">'
@@ -299,6 +320,9 @@ def build(page, lang, asset_prefix='../assets2/', preview_fonts=None):
 <div id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-label="{esc(T['rsvp'])}"><button type="button" class="x" id="rclose" aria-label="Close">×</button>
  <div class="scr">{esc(T['rsvp'])}</div><p class="txt">{esc(T['rsvpsub'])}</p>{form}</div></div>
 <script>var C={json.dumps(cfg, ensure_ascii=False)};</script>
+<script>(function(){{var q=new URLSearchParams(location.search),e=(q.get('e')||'').split(/[^a-z]+/).filter(function(x){{return /^[mjr]$/.test(x)}});if(!e.length)e=C.dflt;C.ev=C.ev.filter(function(v){{return e.indexOf(v.k)>-1}});C.sel=C.ev.map(function(v){{return v.k}}).join('');
+var NE=C.lang==='ne',H={{m:NE?'मेहेन्दी समारोह':'Mehendi Ceremony',j:NE?'शुभविवाह':'Wedding Ceremony',r:NE?'विवाह रिसेप्सन':'Wedding Reception'}};C.head=C.ev.length==1?H[C.ev[0].k]:(NE?'विवाह उत्सव':'Wedding Celebration');
+document.addEventListener('DOMContentLoaded',function(){{var k=document.querySelector('.k2');if(k)k.textContent=C.head;var t=document.title.split(' — ');document.title=(C.ev.length==1?C.ev[0].label:(NE?'विवाह उत्सव':'Wedding Celebration'))+' — '+t[1]}})}})();</script>
 <script>{JS}</script>
 </body></html>"""
     return html
