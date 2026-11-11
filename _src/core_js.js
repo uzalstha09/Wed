@@ -9,7 +9,7 @@ var g=(q.get('to')||q.get('name')||q.get('n')||'').replace(/[<>]/g,'').replace(/
 if(g){document.body.classList.add('named');$('tagn').textContent=g;$('dearn').textContent=T.dear+' '+g;$('rn').value=g}
 var CFGURL='https://raw.githubusercontent.com/uzalstha09/Wed/config/config.json',KEY={m:'mehendi',j:'wedding',r:'reception'};
 var BASE=JSON.parse(JSON.stringify(C.ev));
-function urlOv(){C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89/.test(m))e.map=m.slice(0,600)});}
+function urlOv(){C.ev.forEach(function(e){var t=(q.get(e.k+'t')||'').trim().slice(0,40),v=(q.get(e.k+'v')||'').trim().slice(0,60),m=(q.get(e.k+'m')||'').trim();if(t)e.time=t;if(v)e.venue=v;if(/^https?:\/\//i.test(m)&&!/qLXXtzq6119MEdBVA|nJAhKrkYgUaogWYY9|Rose\+Party\+Palace|0x3996842b4da06a89|SwDc6eLc1i2UiDbU8|B4FtiDtbxvyte3Ln6/.test(m))e.map=m.slice(0,600)});}
 var RS='';function applyCfg(cfg){C.ev=JSON.parse(JSON.stringify(BASE));if(cfg&&typeof cfg.rsvp_url==='string'&&/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.rsvp_url))RS=cfg.rsvp_url;if(cfg)C.ev.forEach(function(e){var c=cfg[KEY[e.k]];if(!c)return;var L=NE?'ne':'en';if(typeof c.map==='string'&&/^https?:\/\//i.test(c.map))e.map=c.map;if(typeof c['time_'+L]==='string')e.time=c['time_'+L];if(typeof c['venue_'+L]==='string')e.venue=c['venue_'+L]});urlOv()}
 function D(e){return new Date(e.date+'T00:00:00')}
 function fd(d){return dv(d.getDate())+' '+T.months[d.getMonth()]+' '+dv(d.getFullYear())}
