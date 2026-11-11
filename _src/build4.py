@@ -13,7 +13,7 @@ PHOTO = base64.b64encode(open(os.path.join(SRC, 'couple_arch.jpg'), 'rb').read()
 HAS_MUSIC = os.path.exists(os.path.join(ROOT, 'music.mp3'))
 
 EV = {
-  'm': dict(date='2026-11-24', bs={'en': 'Mangsir 8, 2083', 'ne': 'मंसिर ८, २०८३'},
+  'm': dict(date='2026-11-23', bs={'en': 'Mangsir 7, 2083', 'ne': 'मंसिर ७, २०८३'},
             label={'en': 'Mehendi', 'ne': 'मेहेन्दी'}, time={'en': '', 'ne': ''},
             venue={'en': 'Jaycees Chowk', 'ne': 'जेसिज चोक'},
             map='https://maps.app.goo.gl/THLxajKnBT9Wqsf86'),
