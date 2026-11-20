@@ -75,17 +75,17 @@ var base=location.href.split(/[?#]/)[0].replace(/link\/(index\.html)?$/,'');
 function sel(){return [].filter.call(document.querySelectorAll('#evsel input'),function(c){return c.checked}).map(function(c){return c.value})}
 function fields(){var f=['gn','bn'];sel().forEach(function(k){f=f.concat(['d','b','t','v','m'].map(function(s){return k+s}))});return f}
 function url(name){var q=new URLSearchParams();q.set('e',sel().join(','));fields().forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return base+lang+'invite/'+(s?'?'+s.replace(/%2C/g,','):'')}
-function msg(u){var g=$('gn').value.trim(),b=$('bn').value.trim();if(lang)return (g||'उज्ज्वल')+' र '+(b||'ब्लेसी')+'को विवाहमा तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u;return 'You are warmly invited to the wedding of '+(g||'Ujjwal')+' & '+(b||'Blesy')+'. Open your invitation: '+u}
-function row(title,u){var d=document.createElement('div');d.className='r';var t=document.createElement('b');t.textContent=title;var s=document.createElement('small');s.textContent=u;d.append(t,s);
+function msg(u,name){var g=$('gn').value.trim(),b=$('bn').value.trim();if(lang)return (name?'आदरणीय '+name+', ':'')+(g||'उज्ज्वल')+' र '+(b||'ब्लेसी')+'को विवाहमा तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u;return (name?'Dear '+name+', you':'You')+' are warmly invited to the wedding of '+(g||'Ujjwal')+' & '+(b||'Blesy')+'. Open your invitation: '+u}
+function row(title,u,name){var d=document.createElement('div');d.className='r';var t=document.createElement('b');t.textContent=title;var s=document.createElement('small');s.textContent=u;d.append(t,s);
  var c=document.createElement('button');c.className='btn';c.textContent='Copy';c.onclick=function(){navigator.clipboard.writeText(u).then(function(){c.textContent='Copied ✓'})};
- var w=document.createElement('a');w.className='btn alt';w.textContent='WhatsApp';w.target='_blank';w.href='https://wa.me/?text='+encodeURIComponent(msg(u));
- var v=document.createElement('a');v.className='btn alt';v.textContent='Viber';v.href='viber://forward?text='+encodeURIComponent(msg(u));
+ var w=document.createElement('a');w.className='btn alt';w.textContent='WhatsApp';w.target='_blank';w.href='https://wa.me/?text='+encodeURIComponent(msg(u,name));
+ var v=document.createElement('a');v.className='btn alt';v.textContent='Viber';v.href='viber://forward?text='+encodeURIComponent(msg(u,name));
  var m=document.createElement('a');m.className='btn alt';m.textContent='Messenger';m.target='_blank';m.href='fb-messenger://share/?link='+encodeURIComponent(u);
  var pv=document.createElement('a');pv.className='btn alt';pv.textContent='Preview';pv.target='_blank';pv.href=u;
  d.append(c,w,v,m,pv);return d}
 function upd(){var s=sel();if(!s.length){this&&this.checked===false&&(this.checked=true);s=sel()}['m','j','r'].forEach(function(k){$('ev'+k).hidden=s.indexOf(k)<0});var p=$('p');p.innerHTML='';p.appendChild(row('Anyone',url()));$('o').innerHTML=''}
 [].forEach.call(document.querySelectorAll('#evsel input'),function(c){c.addEventListener('change',upd)});
 ['gn','bn','md','mb','mt','mv','mm','jd','jb','jt','jv','jm','rd','rb','rt','rv','rm'].forEach(function(i){$(i).addEventListener('input',upd)});
-$('go').onclick=function(){var o=$('o');o.innerHTML='';$('t').value.split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){o.appendChild(row(n,url(n)))})};
+$('go').onclick=function(){var o=$('o');o.innerHTML='';$('t').value.split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){o.appendChild(row(n,url(n),n))})};
 upd();
 </script></body></html>
