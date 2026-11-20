@@ -17,12 +17,15 @@ var c=document.createElement('button');c.textContent='Copy link';c.onclick=funct
 var w=document.createElement('a');w.className='b';w.textContent='WhatsApp';w.target='_blank';w.href='https://wa.me/?text='+encodeURIComponent(msg);
 var m=document.createElement('a');m.className='b';m.textContent='Viber';m.href='viber://forward?text='+encodeURIComponent(msg);
 d.append(c,w,m);return d}
-function mk(u){return $('l').value?'उज्ज्वल र ब्लेसीको विवाहमा तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u:'You are warmly invited to the wedding of Ujjwal & Blesy. Open your invitation: '+u}
+function mk(u,name){var ne=!!$('l').value,w=$('w').value;
+var ev=ne?(w==='reception'?'विवाह रिसेप्सनमा':w==='janti'?'विवाह तथा रिसेप्सनमा':'विवाहमा'):(w==='reception'?'the wedding reception':w==='janti'?'the wedding and reception':'the wedding');
+if(ne)return (name?'आदरणीय '+name+', ':'')+'उज्ज्वल र ब्लेसीको '+ev+' तपाईंलाई हार्दिक निमन्त्रणा। निमन्त्रणा खोल्नुहोस्: '+u;
+return (name?'Dear '+name+', you':'You')+' are warmly invited to '+ev+' of Ujjwal & Blesy. Open your invitation: '+u}
 function url(name){var q=new URLSearchParams(),w=$('w').value,ids=w==='wedding'?['jt','jv','jm']:w==='janti'?['jt','jv','jm','rt','rv','rm']:['rt','rv','rm'];
 ids.forEach(function(i){var v=$(i).value.trim();if(v)q.set(i,v)});if(name)q.set('to',name);var s=q.toString();return location.origin+'/'+$('l').value+$('w').value+'/'+(s?'?'+s:'')}
 function plain(){var p=$('p');p.innerHTML='';p.appendChild(row('Anyone (no name shown)',url(),mk(url())))}
 function upd(){$('gj').style.display=$('w').value==='reception'?'none':'';$('gr').style.display=$('w').value==='wedding'?'none':'';plain();$('o').innerHTML=''}
 ['w','l'].forEach(function(i){$(i).onchange=upd});['jt','jv','jm','rt','rv','rm'].forEach(function(i){$(i).oninput=upd});upd();
 $('go').onclick=function(){var o=$('o');o.innerHTML='';
-$('t').value.split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){var u=url(n);o.appendChild(row(n,u,mk(u)))})};
+$('t').value.split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){var u=url(n);o.appendChild(row(n,u,mk(u,n)))})};
 </script></body></html>
